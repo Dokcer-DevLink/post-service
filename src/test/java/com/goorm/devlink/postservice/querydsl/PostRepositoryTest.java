@@ -58,7 +58,7 @@ public class PostRepositoryTest {
 
         for(int i =0;i<10;i++){
             PostEntity postEntity = PostEntity.getInstanceTest(i, PostType.MENTOR, userUuids.get((i % 3)));
-            StackEntity stackEntity = StackEntity.getInstanceTest(stackNameList.get(i%3),postEntity);
+            StackEntity stackEntity = StackEntity.getInstance(stackNameList.get(i%3),postEntity);
 
             postRepository.save(postEntity);
             stackRepository.save(stackEntity);
@@ -66,7 +66,7 @@ public class PostRepositoryTest {
 
         for(int i =10;i<20;i++){
             PostEntity postEntity = PostEntity.getInstanceTest(i, PostType.MENTEE, userUuids.get((i % 3)));
-            StackEntity stackEntity = StackEntity.getInstanceTest(stackNameList.get(i%3),postEntity);
+            StackEntity stackEntity = StackEntity.getInstance(stackNameList.get(i%3),postEntity);
             postRepository.save(postEntity);
             stackRepository.save(stackEntity);
         }

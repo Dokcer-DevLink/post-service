@@ -8,6 +8,8 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter @Setter
+@Builder
+@AllArgsConstructor
 public class StackEntity {
 
     @Id
@@ -22,12 +24,12 @@ public class StackEntity {
     @JoinColumn(name = "post_id")
     private PostEntity post;
 
+    public static StackEntity getInstance(String stackName,PostEntity postEntity){
 
-    public static StackEntity getInstanceTest(String stackName,PostEntity postEntity){
-        StackEntity stackEntity = new StackEntity();
-        stackEntity.setStackName(stackName);
-        stackEntity.setPost(postEntity);
-        return stackEntity;
+        return StackEntity.builder()
+                .stackName(stackName)
+                .post(postEntity)
+                .build();
     }
 
 

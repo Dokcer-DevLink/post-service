@@ -55,6 +55,10 @@ public class PostEntity {
         return stackNames;
     }
 
+    public void generatePostUuid(){
+        this.postUuid = UUID.randomUUID().toString();
+    }
+
     // 테스트용 메소드
     public static PostEntity getInstanceTest(int i,PostType postType, String userUuid){
         PostEntity postEntity = new PostEntity();

@@ -44,8 +44,9 @@ public class PostController {
     }
 
     @PostMapping("/api/post")
-    public ResponseEntity<String> createPost(@RequestBody PostDetailRequest postDetailRequest){
-        return null; // 생성된 postUuid
+    public ResponseEntity<PostCreateResponse> createPost(@RequestBody PostDetailRequest postDetailRequest){
+        String postUuid = postService.createPost(postDetailRequest);
+        return new ResponseEntity<>(PostCreateResponse.getInstance(postUuid),HttpStatus.CREATED);
     }
 
     @PutMapping("/api/post")
