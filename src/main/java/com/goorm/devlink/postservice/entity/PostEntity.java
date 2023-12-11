@@ -4,12 +4,16 @@ package com.goorm.devlink.postservice.entity;
 import com.goorm.devlink.postservice.vo.PostStatus;
 import com.goorm.devlink.postservice.vo.PostType;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor( access = AccessLevel.PROTECTED)
 public class PostEntity {
 
