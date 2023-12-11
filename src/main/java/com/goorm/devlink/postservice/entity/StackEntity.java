@@ -1,17 +1,13 @@
 package com.goorm.devlink.postservice.entity;
 
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Builder
-@AllArgsConstructor
+@Getter @Setter
 public class StackEntity {
 
     @Id
@@ -25,6 +21,14 @@ public class StackEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private PostEntity post;
+
+
+    public static StackEntity getInstanceTest(String stackName,PostEntity postEntity){
+        StackEntity stackEntity = new StackEntity();
+        stackEntity.setStackName(stackName);
+        stackEntity.setPost(postEntity);
+        return stackEntity;
+    }
 
 
 }

@@ -5,10 +5,12 @@ import com.goorm.devlink.postservice.entity.PostEntity;
 import com.goorm.devlink.postservice.entity.StackEntity;
 import com.goorm.devlink.postservice.repository.PostRepository;
 import com.goorm.devlink.postservice.repository.StackRepository;
-import com.goorm.devlink.postservice.vo.PostStatus;
 import com.goorm.devlink.postservice.vo.PostType;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -17,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
+import static com.goorm.devlink.postservice.entity.QPostEntity.postEntity;
+import static com.goorm.devlink.postservice.entity.QStackEntity.stackEntity;
 
 @SpringBootTest
 @Transactional
@@ -32,12 +36,13 @@ public class PostRepositoryTest {
     @Autowired
     private StackRepository stackRepository;
 
-    JPAQueryFactory jpaQueryFactory;
+    JPAQueryFactory queryFactory;
 
 
     @BeforeEach
     public void init(){
-        jpaQueryFactory = new JPAQueryFactory(em);
+        queryFactory = new JPAQueryFactory(em);
+
 
         List<String> userUuids = new ArrayList<>();
         userUuids.add("11111111");
@@ -45,60 +50,71 @@ public class PostRepositoryTest {
         userUuids.add("33333333");
 
         List<String> stackNameList  = new ArrayList<>();
-        stackNameList.add("Spring");
+        stackNameList.add("323232");
         stackNameList.add("NodeJS");
         stackNameList.add("React");
 
         List<PostEntity> postList = new ArrayList<>();
 
         for(int i =0;i<10;i++){
-            PostEntity postEntity = PostEntity.builder()
-                    .postTitle("Tile"+i)
-                    .postContent(("Content"+i))
-                    .userUuid(userUuids.get((i/3)))
-                    .postUuid(UUID.randomUUID().toString())
-                    .postType(PostType.MENTOR)
-                    .postStatus(PostStatus.WAITING)
-                    .postImageUrl("default_image_url")
-                    .address("address"+i)
-                    .runningTime(30)
-                    .isDeleted(false)
-                    .build();
-
-            StackEntity stackEntity = StackEntity.builder()
-                            .stackName(stackNameList.get(i/3))
-                            .post(postEntity)
-                            .build();
+            PostEntity postEntity = PostEntity.getInstanceTest(i, PostType.MENTOR, userUuids.get((i % 3)));
+            StackEntity stackEntity = StackEntity.getInstanceTest(stackNameList.get(i%3),postEntity);
 
             postRepository.save(postEntity);
             stackRepository.save(stackEntity);
-
         }
 
         for(int i =10;i<20;i++){
-            PostEntity postEntity = PostEntity.builder()
-                    .postTitle("Tile"+i)
-                    .postContent(("Content"+i))
-                    .userUuid(userUuids.get((i/3)))
-                    .postUuid(UUID.randomUUID().toString())
-                    .postType(PostType.MENTEE)
-                    .postStatus(PostStatus.WAITING)
-                    .postImageUrl("default_image_url")
-                    .address("address"+i)
-                    .runningTime(30)
-                    .isDeleted(false)
-                    .build();
-            StackEntity stackEntity = StackEntity.builder()
-                    .stackName(stackNameList.get(i/3))
-                    .post(postEntity)
-                    .build();
+            PostEntity postEntity = PostEntity.getInstanceTest(i, PostType.MENTEE, userUuids.get((i % 3)));
+            StackEntity stackEntity = StackEntity.getInstanceTest(stackNameList.get(i%3),postEntity);
             postRepository.save(postEntity);
             stackRepository.save(stackEntity);
         }
+
+        em.flush();
+        em.clear();
     }
 
+    @Test
+    public void findPostListByPostTypeAndKeyWordTest(){
 
+        PostType postType = PostType.MENTOR;
+        String keyword = "Spring"   ; // 키워드는 있을수도 없을수도 있음
+        List<PostEntity> postList = queryFactory
+                                        .selectFrom(postEntity)
+                                        .join(postEntity.stacks,stackEntity).fetchJoin()
+                                        .where(
+                                                postEntity.postType.eq(postType),
+                                                searchKeywordCondition(keyword)
+                                        ).fetch();
 
+        System.out.println(postList.size());
+        for (PostEntity postEntity : postList) {
+            System.out.println(postEntity.getPostTitle());
+            System.out.println(postEntity.getPostContent());
+            System.out.println(postEntity.getStacks().size());
+            postEntity.getStacks().forEach(stack ->{
+                System.out.println(stack.getStackName());
+            });
+            System.out.println();
+        }
+    }
 
+    private BooleanBuilder searchKeywordCondition(String keyword){
+        return ( keyword == null || keyword.isEmpty() )? null : getKeywordConditionBuilder(keyword);
+    }
+
+    private BooleanBuilder getKeywordConditionBuilder(String keyword){
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.or(postEntity.postTitle.contains(keyword));
+        booleanBuilder.or(postEntity.postContent.contains(keyword));
+        booleanBuilder.or(postEntity.in(
+                JPAExpressions.select(stackEntity.post)
+                        .from(stackEntity)
+                        .where(stackEntity.stackName.contains(keyword))
+        ));
+
+        return booleanBuilder;
+    }
 
 }
