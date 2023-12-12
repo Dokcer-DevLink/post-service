@@ -9,6 +9,8 @@ import com.goorm.devlink.postservice.vo.PostSimpleResponse;
 import com.goorm.devlink.postservice.vo.PostStatusRequest;
 import com.goorm.devlink.postservice.vo.PostType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -29,9 +31,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostSimpleResponse> getPostList(PostType postType, String keyword) {
-        List<PostEntity> findPostList = postRepository.findPostListByPostTypeAndKeyWord(postType,keyword);
-        return modelMapperUtil.convertToPostSimpleResponseList(findPostList);
+    public Page<PostSimpleResponse> getPostList(PostType postType, String keyword) {
+        PageRequest pageRequest = PageRequest.of(0,5);
+        Page<PostEntity> postPage = postRepository.findPostListByPostTypeAndKeyWord(postType, keyword, pageRequest);
+        return postPage.map( post -> PostSimpleResponse.getInstance(post) );
     }
 
     @Override

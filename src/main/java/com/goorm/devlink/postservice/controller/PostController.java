@@ -5,6 +5,7 @@ import com.goorm.devlink.postservice.dto.PostBasicDto;
 import com.goorm.devlink.postservice.service.PostService;
 import com.goorm.devlink.postservice.vo.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class PostController {
 
     // 포스트 리스트 조회 ( 포스트 검색 페이지 )  무한스크롤???
     @GetMapping("/api/post/list")
-    public ResponseEntity<List<PostSimpleResponse>> getPostList(@RequestParam @NotBlank PostType postType,
+    public ResponseEntity<Page<PostSimpleResponse>> getPostList(@RequestParam @NotBlank PostType postType,
                                                                 @RequestParam String keyword){
         return new ResponseEntity<>(postService.getPostList(postType,keyword), HttpStatus.OK);
     }
@@ -70,7 +71,7 @@ public class PostController {
         return new ResponseEntity<>(responseDelete,HttpStatus.OK);
     }
 
-    // 포스트 상세 없데이트
+    // 포스트 상세 업데이트
     @PutMapping("/api/post/status")
     public ResponseEntity<PostCommentResponse> updatePostStatus(@RequestBody PostStatusRequest postStatusRequest){
         String postUuid = postService.updateStatus(postStatusRequest);
