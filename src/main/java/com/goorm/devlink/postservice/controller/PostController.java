@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,10 +22,11 @@ public class PostController {
     private final PostService postService;
 
     // 추천 멘토 포스트, 멘티 포스트 조회
-    @GetMapping("/api/post/recommends")
-    public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam @NotBlank String postType){
-        // 프로필 서비스에서 프로필 데이터 가져와야 함.
-        return null;
+    @GetMapping("/api/post/recommend")
+    public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam @NotBlank PostType postType){
+        // 프로필 서비스에서 프로필에 설정된 스택 리스트 가져와야 함.
+        // stack List
+        return new ResponseEntity<>(postService.getRecommendPostList(postType,getTmpProfileStackList()),HttpStatus.OK);
     }
 
     // 포스트 리스트 조회 ( 포스트 검색 페이지 )
@@ -77,6 +79,15 @@ public class PostController {
         PostCommentResponse responseUpdate = PostCommentResponse.getInstanceForUpdate(postUuid);
         return new ResponseEntity<>(responseUpdate,HttpStatus.OK);
 
+    }
+
+    // 임시 프로필에서 가져온 스택리스트 데이터
+    private List<String> getTmpProfileStackList(){
+        List<String> stacks = new ArrayList<>();
+        stacks.add("Spring");
+        stacks.add("K8S");
+        stacks.add("AWS");
+        return stacks;
     }
 
 
