@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*") // 임시로 모든 도메인 CORS 허용
 public class PostController {
 
     private final PostService postService;
@@ -39,9 +40,10 @@ public class PostController {
         return null;
     }
 
+    //포스트 리스트 조회 ( 상세페이지 )
     @GetMapping("/api/post")
     public ResponseEntity<PostDetailResponse> getPostDetail(@RequestParam String postUuid){
-        return null;
+        return new ResponseEntity<>(postService.getDetailPost(postUuid),HttpStatus.OK);
     }
 
     // 포스트 생성하기
@@ -62,20 +64,16 @@ public class PostController {
 
     // 포스트 삭제하기
     @DeleteMapping("/api/post")
-    public void deletePost(@RequestParam String postUuid){
-
+    public ResponseEntity<PostCommentResponse> deletePost(@RequestParam String postUuid){
+        postService.deletePost(postUuid);
+        PostCommentResponse responseDelete = PostCommentResponse.getInstanceForDelete(postUuid);
+        return new ResponseEntity<>(responseDelete,HttpStatus.OK);
     }
 
     @PutMapping("/api/post/status")
     public void editPostStatus(@RequestBody PostStatusRequest postStatusRequest){
 
     }
-
-
-
-
-
-
 
 
 }

@@ -1,17 +1,17 @@
 package com.goorm.devlink.postservice.service.impl;
-
-
 import com.goorm.devlink.postservice.dto.PostBasicDto;
 import com.goorm.devlink.postservice.entity.PostEntity;
 import com.goorm.devlink.postservice.repository.PostRepository;
 import com.goorm.devlink.postservice.service.PostService;
 import com.goorm.devlink.postservice.util.ModelMapperUtil;
+import com.goorm.devlink.postservice.vo.PostDetailResponse;
 import com.goorm.devlink.postservice.vo.PostSimpleResponse;
 import com.goorm.devlink.postservice.vo.PostType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,9 +35,24 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void editPost(PostBasicDto instanceForEdit) {
-        long postId = postRepository.findByPostUuid(instanceForEdit.getPostUuid()).getId();
+        Optional<PostEntity> optionalPost
+                = Optional.of(postRepository.findByPostUuid(instanceForEdit.getPostUuid()));
+        optionalPost.orElseThrow(()-> { throw new NoSuchElementException();});
         PostEntity postEntity = modelMapperUtil.convertToPostEntity(instanceForEdit);
-        postEntity.updateForMerge(postId);
+        postEntity.updateForMerge(optionalPost.get().getId());
         postRepository.save(postEntity);
+    }
+
+    @Override
+    public void deletePost(String postUuid) {
+        Optional<PostEntity> optionalPost = Optional.of(postRepository.findByPostUuid(postUuid));
+        postRepository.delete(optionalPost.orElseThrow(()->{ throw new NoSuchElementException();}));
+    }
+
+    @Override
+    public PostDetailResponse getDetailPost(String postUuid) {
+        Optional<PostEntity> optionalPost = Optional.of(postRepository.findByPostUuid(postUuid));
+        optionalPost.orElseThrow(()-> { throw new NoSuchElementException();});
+        return modelMapperUtil.convertToPostDetailResponse(optionalPost.get());
     }
 }

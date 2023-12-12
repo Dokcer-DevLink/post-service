@@ -3,6 +3,7 @@ package com.goorm.devlink.postservice.util;
 
 import com.goorm.devlink.postservice.dto.PostBasicDto;
 import com.goorm.devlink.postservice.entity.PostEntity;
+import com.goorm.devlink.postservice.vo.PostDetailResponse;
 import com.goorm.devlink.postservice.vo.PostSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -29,6 +30,11 @@ public class ModelMapperUtil {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         PostEntity postEntity = mapper.map(postBasicDto, PostEntity.class);
         return postEntity;
+    }
+
+    public PostDetailResponse convertToPostDetailResponse(PostEntity postEntity){
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        return mapper.map(postEntity, PostDetailResponse.class);
     }
 
 //    public List<StackEntity> convertToStackEntityList(List<String> stackNames, PostEntity postEntity){

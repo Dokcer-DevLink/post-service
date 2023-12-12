@@ -38,8 +38,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         booleanBuilder.or(postEntity.postTitle.contains(keyword));
         booleanBuilder.or(postEntity.stacks.contains(keyword));
         //booleanBuilder.or(postEntity.postContent.contains(keyword));
-
-
         return booleanBuilder;
     }
 

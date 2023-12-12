@@ -13,6 +13,7 @@ import java.util.UUID;
 @Getter
 @Builder
 public class PostBasicDto {
+    private String postUuid;
     private String postTitle;
     private String postImageUrl;
     private String postContent;
@@ -23,7 +24,6 @@ public class PostBasicDto {
     private String runningTime;
     private String userUuid;
     private PostStatus postStatus;
-    private String postUuid;
 
 
     public static PostBasicDto getInstanceForCreate(PostDetailRequest postDetailRequest, String userUuid){
