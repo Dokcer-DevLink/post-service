@@ -43,26 +43,17 @@ public class PostEntity {
     @Column(name = "isDeleted")
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "post")
-    private List<StackEntity> stacks = new ArrayList<>();
-
-
-    public List<String> getStackNames(){
-        List<String> stackNames = new ArrayList<>();
-        for (StackEntity stack : stacks) {
-            stackNames.add(stack.getStackName());
-        }
-        return stackNames;
-    }
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> stacks = new ArrayList<>();
 
     public void updateForMerge(long postId) {
         id = postId;
     }
 
     // 테스트용 메소드
-    public static PostEntity getInstanceTest(int i,PostType postType, String userUuid){
+    public static PostEntity getInstanceTest(int i,PostType postType, String userUuid,List<String> stacks){
         PostEntity postEntity = new PostEntity();
-        postEntity.setPostTitle("Spring"+i);
+        postEntity.setPostTitle("Title"+i);
         postEntity.setPostContent(("Content"+i));
         postEntity.setUserUuid(userUuid);
         postEntity.setPostUuid(UUID.randomUUID().toString());
@@ -72,6 +63,7 @@ public class PostEntity {
         postEntity.setAddress("address"+i);
         postEntity.setRunningTime(30);
         postEntity.setDeleted(false);
+        postEntity.stacks = stacks;
 
         return postEntity;
     }
