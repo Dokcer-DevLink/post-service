@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<PostEntity,Long>, PostRepositoryCustom {
 
+    PostEntity findByPostUuid(String postUuid);
 }

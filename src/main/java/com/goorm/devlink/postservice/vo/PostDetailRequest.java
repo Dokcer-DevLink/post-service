@@ -16,7 +16,11 @@ public class PostDetailRequest {
     private String PostContent;
     private List<String> stacks;
     private OnOffline onOffline;
+    private PostType postType;
+    private PostStatus postStatus;
     private String address;
     private String runningTime;
+    private String postUuid;
+
 
 }

@@ -26,7 +26,7 @@ public class PostEntity {
     private String postContent;
     @Column(name = "user_uuid")
     private String userUuid;
-    @Column(name = "post_uuid")
+    @Column(name = "post_uuid",unique = true)
     private String postUuid;
     @Column(name = "post_type")
     @Enumerated(EnumType.STRING)
@@ -55,8 +55,8 @@ public class PostEntity {
         return stackNames;
     }
 
-    public void generatePostUuid(){
-        this.postUuid = UUID.randomUUID().toString();
+    public void updateForMerge(long postId) {
+        id = postId;
     }
 
     // 테스트용 메소드
@@ -75,8 +75,6 @@ public class PostEntity {
 
         return postEntity;
     }
-
-
 
 
 

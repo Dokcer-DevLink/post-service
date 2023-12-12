@@ -1,9 +1,9 @@
 package com.goorm.devlink.postservice.util;
 
 
+import com.goorm.devlink.postservice.dto.PostBasicDto;
 import com.goorm.devlink.postservice.entity.PostEntity;
 import com.goorm.devlink.postservice.entity.StackEntity;
-import com.goorm.devlink.postservice.vo.PostDetailRequest;
 import com.goorm.devlink.postservice.vo.PostSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -26,10 +26,9 @@ public class ModelMapperUtil {
         return postSimpleResponseList;
     }
 
-    public PostEntity convertToPostEntity(PostDetailRequest postDetailRequest) {
+    public PostEntity convertToPostEntity(PostBasicDto postBasicDto) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        PostEntity postEntity = mapper.map(postDetailRequest, PostEntity.class);
-        postEntity.generatePostUuid();;
+        PostEntity postEntity = mapper.map(postBasicDto, PostEntity.class);
         return postEntity;
     }
 

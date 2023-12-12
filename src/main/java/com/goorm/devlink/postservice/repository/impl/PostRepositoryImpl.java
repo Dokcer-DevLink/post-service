@@ -25,7 +25,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         return queryFactory
                 .selectFrom(postEntity)
-                .join(postEntity.stackEntityList,stackEntity).fetchJoin()
+                .join(postEntity.stacks,stackEntity).fetchJoin()
                 .where(
                         postEntity.postType.eq(postType),
                         searchKeywordCondition(keyword)
@@ -39,7 +39,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     private BooleanBuilder getKeywordConditionBuilder(String keyword){
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.or(postEntity.postTitle.contains(keyword));
-        booleanBuilder.or(postEntity.postContent.contains(keyword));
+        //booleanBuilder.or(postEntity.postContent.contains(keyword));
         booleanBuilder.or(postEntity.in(
                 JPAExpressions.select(stackEntity.post)
                         .from(stackEntity)
