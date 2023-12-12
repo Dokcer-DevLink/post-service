@@ -11,6 +11,7 @@ import com.goorm.devlink.postservice.vo.PostType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -34,6 +35,14 @@ public class PostServiceImpl implements PostService {
     public Page<PostSimpleResponse> getPostList(PostType postType, String keyword) {
         PageRequest pageRequest = PageRequest.of(0,5);
         Page<PostEntity> postPage = postRepository.findPostListByPostTypeAndKeyWord(postType, keyword, pageRequest);
+        return postPage.map( post -> PostSimpleResponse.getInstance(post) );
+    }
+
+    @Override
+    public Page<PostSimpleResponse> getMyPostList(String userUuid) {
+        PageRequest pageRequest = PageRequest.of(0,5);
+        //PageRequest pageRequest = PageRequest.of(0,5,Sort.by(Sort.Direction.DESC,"createdDate")); //Auditing 추가시...
+        Page<PostEntity> postPage = postRepository.findByUserUuid(userUuid,pageRequest);
         return postPage.map( post -> PostSimpleResponse.getInstance(post) );
     }
 
@@ -68,4 +77,6 @@ public class PostServiceImpl implements PostService {
         postRepository.save(optionalPost.get());
         return postStatusRequest.getPostUuid();
     }
+
+
 }

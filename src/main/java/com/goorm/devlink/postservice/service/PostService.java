@@ -16,4 +16,5 @@ public interface PostService {
     void deletePost(String postUuid);
     PostDetailResponse getDetailPost(String postUuid);
     String updateStatus(PostStatusRequest postStatusRequest);
+    Page<PostSimpleResponse> getMyPostList(String userUuid);
 }

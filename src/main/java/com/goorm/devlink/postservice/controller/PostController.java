@@ -20,25 +20,24 @@ public class PostController {
 
     private final PostService postService;
 
-    // 추천 멘토 포스트, 멘티 포스트 조회 무한스크롤???
+    // 추천 멘토 포스트, 멘티 포스트 조회
     @GetMapping("/api/post/recommends")
-    public ResponseEntity<List<PostSimpleResponse>> getRecommendPostList(@RequestParam @NotBlank String postType){
+    public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam @NotBlank String postType){
         // 프로필 서비스에서 프로필 데이터 가져와야 함.
         return null;
     }
 
-    // 포스트 리스트 조회 ( 포스트 검색 페이지 )  무한스크롤???
+    // 포스트 리스트 조회 ( 포스트 검색 페이지 )
     @GetMapping("/api/post/list")
     public ResponseEntity<Page<PostSimpleResponse>> getPostList(@RequestParam @NotBlank PostType postType,
                                                                 @RequestParam String keyword){
         return new ResponseEntity<>(postService.getPostList(postType,keyword), HttpStatus.OK);
     }
 
-    // 포스트 리스트 조회 ( 마이페이지 ) 무한스크롤???
+    // 포스트 리스트 조회 ( 마이페이지 )
     @GetMapping("/api/post/my")
-    public ResponseEntity<List<PostSimpleResponse>> getMyPostList(@RequestParam String postType, @RequestHeader("userUuid") String userUuid){
-
-        return null;
+    public ResponseEntity<Page<PostSimpleResponse>> getMyPostList(@RequestParam String postType, @RequestHeader("userUuid") String userUuid){
+        return new ResponseEntity<>(postService.getMyPostList(userUuid), HttpStatus.OK);
     }
 
     //포스트 리스트 조회 ( 상세페이지 )
