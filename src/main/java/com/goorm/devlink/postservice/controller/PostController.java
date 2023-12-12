@@ -44,6 +44,7 @@ public class PostController {
         return null;
     }
 
+    // 포스트 생성하기
     @PostMapping("/api/post")
     public ResponseEntity<PostCommentResponse> createPost(@RequestBody PostDetailRequest postDetailRequest,
                                                           @RequestHeader("userUuid") @NotBlank String userUuid){
@@ -51,6 +52,7 @@ public class PostController {
         return new ResponseEntity<>(PostCommentResponse.getInstanceForCreate(postUuid),HttpStatus.CREATED);
     }
 
+    // 포스트 수정하기 ( 포스트 상세 페이지 )
     @PutMapping("/api/post")
     public ResponseEntity<PostCommentResponse> editPost(@RequestBody PostDetailRequest postDetailRequest){
         postService.editPost(PostBasicDto.getInstanceForEdit(postDetailRequest));
@@ -58,6 +60,7 @@ public class PostController {
         return new ResponseEntity<>(responseEdit, HttpStatus.OK);
     }
 
+    // 포스트 삭제하기
     @DeleteMapping("/api/post")
     public void deletePost(@RequestParam String postUuid){
 

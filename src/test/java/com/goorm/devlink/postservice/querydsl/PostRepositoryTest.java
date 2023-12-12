@@ -5,7 +5,6 @@ import com.goorm.devlink.postservice.entity.PostEntity;
 import com.goorm.devlink.postservice.repository.PostRepository;
 import com.goorm.devlink.postservice.vo.PostType;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -99,11 +98,6 @@ public class PostRepositoryTest {
         booleanBuilder.or(postEntity.postTitle.contains(keyword));
         booleanBuilder.or(postEntity.postContent.contains(keyword));
         booleanBuilder.or(postEntity.stacks.contains(keyword));
-//        booleanBuilder.or(postEntity.in(
-//                JPAExpressions.select()
-//                        .from(postEntity.stacks)
-//                        .where(stackEntity.stackName.contains(keyword))
-//        ));
 
         return booleanBuilder;
     }
