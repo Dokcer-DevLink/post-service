@@ -70,8 +70,12 @@ public class PostController {
         return new ResponseEntity<>(responseDelete,HttpStatus.OK);
     }
 
+    // 포스트 상세 없데이트
     @PutMapping("/api/post/status")
-    public void editPostStatus(@RequestBody PostStatusRequest postStatusRequest){
+    public ResponseEntity<PostCommentResponse> updatePostStatus(@RequestBody PostStatusRequest postStatusRequest){
+        String postUuid = postService.updateStatus(postStatusRequest);
+        PostCommentResponse responseUpdate = PostCommentResponse.getInstanceForUpdate(postUuid);
+        return new ResponseEntity<>(responseUpdate,HttpStatus.OK);
 
     }
 

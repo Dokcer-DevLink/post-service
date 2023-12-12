@@ -6,6 +6,7 @@ import com.goorm.devlink.postservice.service.PostService;
 import com.goorm.devlink.postservice.util.ModelMapperUtil;
 import com.goorm.devlink.postservice.vo.PostDetailResponse;
 import com.goorm.devlink.postservice.vo.PostSimpleResponse;
+import com.goorm.devlink.postservice.vo.PostStatusRequest;
 import com.goorm.devlink.postservice.vo.PostType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,5 +55,14 @@ public class PostServiceImpl implements PostService {
         Optional<PostEntity> optionalPost = Optional.of(postRepository.findByPostUuid(postUuid));
         optionalPost.orElseThrow(()-> { throw new NoSuchElementException();});
         return modelMapperUtil.convertToPostDetailResponse(optionalPost.get());
+    }
+
+    @Override
+    public String updateStatus(PostStatusRequest postStatusRequest) {
+        Optional<PostEntity> optionalPost = Optional.of(postRepository.findByPostUuid(postStatusRequest.getPostUuid()));
+        optionalPost.orElseThrow(()-> { throw new NoSuchElementException();});
+        optionalPost.get().updateStatus(postStatusRequest.getPostStatus());
+        postRepository.save(optionalPost.get());
+        return postStatusRequest.getPostUuid();
     }
 }

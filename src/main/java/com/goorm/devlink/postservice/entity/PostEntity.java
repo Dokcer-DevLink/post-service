@@ -1,6 +1,7 @@
 package com.goorm.devlink.postservice.entity;
 
 
+import com.goorm.devlink.postservice.vo.OnOffline;
 import com.goorm.devlink.postservice.vo.PostStatus;
 import com.goorm.devlink.postservice.vo.PostType;
 import lombok.*;
@@ -34,6 +35,9 @@ public class PostEntity {
     @Column(name = "post_status")
     @Enumerated(EnumType.STRING)
     private PostStatus postStatus;
+    @Column(name = "onOffline")
+    @Enumerated(EnumType.STRING)
+    private OnOffline onOffline;
     @Column(name = "post_image_url")
     private String postImageUrl;
     @Column(name = "address")
@@ -70,5 +74,7 @@ public class PostEntity {
     }
 
 
-
+    public void updateStatus(PostStatus postStatus) {
+        this.postStatus = postStatus;
+    }
 }

@@ -34,4 +34,12 @@ public class PostCommentResponse {
                 .message("Post is deleted.")
                 .build();
     }
+
+    public static PostCommentResponse getInstanceForUpdate(String postUuid){
+        return PostCommentResponse
+                .builder()
+                .postUuid(postUuid)
+                .message("Post is updated")
+                .build();
+    }
 }
