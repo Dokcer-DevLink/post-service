@@ -41,10 +41,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostSimpleResponse> getMyPostList(String userUuid) {
+    public Page<PostSimpleResponse> getMyPostList(PostType postType, String userUuid) {
         PageRequest pageRequest = PageRequest.of(pageConfigVo.getOffset(), pageConfigVo.getSize(),
-                Sort.by(Sort.Direction.DESC, pageConfigVo.getOrderBy()));
-        Page<PostEntity> postPage = postRepository.findByUserUuid(userUuid,pageRequest);
+                Sort.by(Sort.Direction.DESC,pageConfigVo.getOrderBy()));
+        Page<PostEntity> postPage = postRepository.findByUserUuidAndPostType(userUuid,postType,pageRequest);
         return postPage.map( post -> PostSimpleResponse.getInstance(post) );
     }
 

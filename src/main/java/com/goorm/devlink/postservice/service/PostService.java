@@ -16,6 +16,6 @@ public interface PostService {
     void deletePost(String postUuid);
     PostDetailResponse getDetailPost(String postUuid);
     String updateStatus(PostStatusRequest postStatusRequest);
-    Page<PostSimpleResponse> getMyPostList(String userUuid);
+    Page<PostSimpleResponse> getMyPostList(PostType postType,String userUuid);
     Page<PostSimpleResponse> getRecommendPostList(PostType postType, List<String> profileStacks);
 }

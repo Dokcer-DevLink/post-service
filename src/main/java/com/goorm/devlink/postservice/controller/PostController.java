@@ -42,9 +42,9 @@ public class PostController {
 
     // 포스트 리스트 조회 ( 마이페이지 )
     @GetMapping("/api/post/my")
-    public ResponseEntity<Page<PostSimpleResponse>> getMyPostList(@RequestParam @NotBlank String postType,
+    public ResponseEntity<Page<PostSimpleResponse>> getMyPostList(@RequestParam @NotBlank PostType postType,
                                                                   @RequestHeader("userUuid") @NotBlank String userUuid){
-        return new ResponseEntity<>(postService.getMyPostList(userUuid), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getMyPostList(postType,userUuid), HttpStatus.OK);
     }
 
     //포스트 리스트 조회 ( 상세페이지 )
