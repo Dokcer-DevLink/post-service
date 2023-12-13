@@ -19,6 +19,9 @@ public class MessageUtil {
         return getMessage("request.empty.postUuid");
     }
 
+    public String getPostUuidNoSuchMessage(String postUuid){
+        return getMessage("request.nosuchelement.postUuid",new String[]{postUuid});
+    }
     public String getEnumTypeMisMatchMessage(String errorEnum, String errorValue){
         switch(errorEnum){
             case "postType" : return getMessage("request.typemismatch.postType",new String[]{errorValue});
