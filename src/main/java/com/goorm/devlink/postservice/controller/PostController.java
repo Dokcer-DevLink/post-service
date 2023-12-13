@@ -1,6 +1,5 @@
 package com.goorm.devlink.postservice.controller;
 
-
 import com.goorm.devlink.postservice.dto.PostBasicDto;
 import com.goorm.devlink.postservice.service.PostService;
 import com.goorm.devlink.postservice.vo.*;
@@ -9,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +19,15 @@ public class PostController {
 
     private final PostService postService;
 
+    @GetMapping("/api/post/test")
+    public String test(@RequestParam String postType){
+        return "OK";
+    }
+
     // 추천 멘토 포스트, 멘티 포스트 조회
     @GetMapping("/api/post/recommend")
-    public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam @NotBlank PostType postType){
-        // 프로필 서비스에서 프로필에 설정된 스택 리스트 가져와야 함.
+    public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam PostType postType){
+        // 프로필 서비스에서 스택리스트 가져오는 로직 필요
         List<String> tmpStacks = getTmpProfileStackList(); // 임시 프로필 데이터
         // stack List
         return new ResponseEntity<>(postService.getRecommendPostList(postType,tmpStacks),HttpStatus.OK);
@@ -39,7 +42,8 @@ public class PostController {
 
     // 포스트 리스트 조회 ( 마이페이지 )
     @GetMapping("/api/post/my")
-    public ResponseEntity<Page<PostSimpleResponse>> getMyPostList(@RequestParam String postType, @RequestHeader("userUuid") String userUuid){
+    public ResponseEntity<Page<PostSimpleResponse>> getMyPostList(@RequestParam @NotBlank String postType,
+                                                                  @RequestHeader("userUuid") @NotBlank String userUuid){
         return new ResponseEntity<>(postService.getMyPostList(userUuid), HttpStatus.OK);
     }
 
@@ -51,17 +55,17 @@ public class PostController {
 
     // 포스트 생성하기
     @PostMapping("/api/post")
-    public ResponseEntity<PostCommentResponse> createPost(@RequestBody PostDetailRequest postDetailRequest,
+    public ResponseEntity<PostCommentResponse> createPost(@RequestBody PostCreateRequest postCreateRequest,
                                                           @RequestHeader("userUuid") @NotBlank String userUuid){
-        String postUuid = postService.createPost(PostBasicDto.getInstanceForCreate(postDetailRequest,userUuid));
+        String postUuid = postService.createPost(PostBasicDto.getInstanceForCreate(postCreateRequest,userUuid));
         return new ResponseEntity<>(PostCommentResponse.getInstanceForCreate(postUuid),HttpStatus.CREATED);
     }
 
     // 포스트 수정하기 ( 포스트 상세 페이지 )
     @PutMapping("/api/post")
-    public ResponseEntity<PostCommentResponse> editPost(@RequestBody PostDetailRequest postDetailRequest){
-        postService.editPost(PostBasicDto.getInstanceForEdit(postDetailRequest));
-        PostCommentResponse responseEdit = PostCommentResponse.getInstanceForEdit(postDetailRequest.getPostUuid());
+    public ResponseEntity<PostCommentResponse> editPost(@RequestBody PostEditRequest postEditRequest){
+        postService.editPost(PostBasicDto.getInstanceForEdit(postEditRequest));
+        PostCommentResponse responseEdit = PostCommentResponse.getInstanceForEdit(postEditRequest.getPostUuid());
         return new ResponseEntity<>(responseEdit, HttpStatus.OK);
     }
 

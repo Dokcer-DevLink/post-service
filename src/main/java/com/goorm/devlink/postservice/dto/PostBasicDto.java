@@ -1,9 +1,6 @@
 package com.goorm.devlink.postservice.dto;
 
-import com.goorm.devlink.postservice.vo.OnOffline;
-import com.goorm.devlink.postservice.vo.PostDetailRequest;
-import com.goorm.devlink.postservice.vo.PostStatus;
-import com.goorm.devlink.postservice.vo.PostType;
+import com.goorm.devlink.postservice.vo.*;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -26,34 +23,34 @@ public class PostBasicDto {
     private PostStatus postStatus;
 
 
-    public static PostBasicDto getInstanceForCreate(PostDetailRequest postDetailRequest, String userUuid){
+    public static PostBasicDto getInstanceForCreate(PostCreateRequest postCreateRequest, String userUuid){
         return PostBasicDto.builder()
-                .postTitle(postDetailRequest.getPostTitle())
-                .postImageUrl(postDetailRequest.getPostImageUrl())
-                .postContent(postDetailRequest.getPostContent())
-                .stacks(postDetailRequest.getStacks())
-                .onOffline(postDetailRequest.getOnOffline())
-                .postType(postDetailRequest.getPostType())
-                .address(postDetailRequest.getAddress())
-                .runningTime(postDetailRequest.getRunningTime())
+                .postTitle(postCreateRequest.getPostTitle())
+                .postImageUrl(postCreateRequest.getPostImageUrl())
+                .postContent(postCreateRequest.getPostContent())
+                .stacks(postCreateRequest.getStacks())
+                .onOffline(postCreateRequest.getOnOffline())
+                .postType(postCreateRequest.getPostType())
+                .address(postCreateRequest.getAddress())
+                .runningTime(postCreateRequest.getRunningTime())
                 .userUuid(userUuid)
                 .postUuid(UUID.randomUUID().toString())
                 .postStatus(PostStatus.WAITING)
                 .build();
     }
 
-    public static PostBasicDto getInstanceForEdit(PostDetailRequest postDetailRequest){
+    public static PostBasicDto getInstanceForEdit(PostEditRequest postEditRequest){
         return PostBasicDto.builder()
-                .postTitle(postDetailRequest.getPostTitle())
-                .postImageUrl(postDetailRequest.getPostImageUrl())
-                .postContent(postDetailRequest.getPostContent())
-                .stacks(postDetailRequest.getStacks())
-                .onOffline(postDetailRequest.getOnOffline())
-                .postType(postDetailRequest.getPostType())
-                .address(postDetailRequest.getAddress())
-                .runningTime(postDetailRequest.getRunningTime())
-                .postStatus(postDetailRequest.getPostStatus())
-                .postUuid(postDetailRequest.getPostUuid())
+                .postTitle(postEditRequest.getPostTitle())
+                .postImageUrl(postEditRequest.getPostImageUrl())
+                .postContent(postEditRequest.getPostContent())
+                .stacks(postEditRequest.getStacks())
+                .onOffline(postEditRequest.getOnOffline())
+                .postType(postEditRequest.getPostType())
+                .address(postEditRequest.getAddress())
+                .runningTime(postEditRequest.getRunningTime())
+                .postStatus(postEditRequest.getPostStatus())
+                .postUuid(postEditRequest.getPostUuid())
                 .build();
     }
 }
