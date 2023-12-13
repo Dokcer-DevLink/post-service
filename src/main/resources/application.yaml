@@ -21,3 +21,9 @@ spring:
     defer-datasource-initialization: true
     show-sql: true
     generate-ddl: true
+
+data:
+  page:
+    offset: 0
+    size: 8
+    orderBy: createdDate

@@ -1,4 +1,5 @@
 package com.goorm.devlink.postservice.service.impl;
+import com.goorm.devlink.postservice.config.properties.vo.PageConfigVo;
 import com.goorm.devlink.postservice.dto.PostBasicDto;
 import com.goorm.devlink.postservice.entity.PostEntity;
 import com.goorm.devlink.postservice.repository.PostRepository;
@@ -23,6 +24,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final ModelMapperUtil modelMapperUtil;
+    private final PageConfigVo pageConfigVo;
 
     @Override
     public String createPost(PostBasicDto postBasicDto) {
@@ -33,21 +35,22 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostSimpleResponse> getPostList(PostType postType, String keyword) {
-        PageRequest pageRequest = PageRequest.of(0,5);
+        PageRequest pageRequest = PageRequest.of(pageConfigVo.getOffset(), pageConfigVo.getSize());
         Page<PostEntity> postPage = postRepository.findPostListByPostTypeAndKeyWord(postType, keyword, pageRequest);
         return postPage.map( post -> PostSimpleResponse.getInstance(post) );
     }
 
     @Override
     public Page<PostSimpleResponse> getMyPostList(String userUuid) {
-        PageRequest pageRequest = PageRequest.of(0,5,Sort.by(Sort.Direction.DESC,"createdDate")); //Auditing 추가시 활성화
+        PageRequest pageRequest = PageRequest.of(pageConfigVo.getOffset(), pageConfigVo.getSize(),
+                Sort.by(Sort.Direction.DESC, pageConfigVo.getOrderBy()));
         Page<PostEntity> postPage = postRepository.findByUserUuid(userUuid,pageRequest);
         return postPage.map( post -> PostSimpleResponse.getInstance(post) );
     }
 
     @Override
     public Page<PostSimpleResponse> getRecommendPostList(PostType postType, List<String> profileStacks) {
-        PageRequest pageRequest = PageRequest.of(0,10);
+        PageRequest pageRequest = PageRequest.of(pageConfigVo.getOffset(), pageConfigVo.getSize());
         Page<PostEntity> postPage = postRepository.findPostListByPostTypeAndStacks(postType,profileStacks,pageRequest);
         return postPage.map( post -> PostSimpleResponse.getInstance(post) );
     }
