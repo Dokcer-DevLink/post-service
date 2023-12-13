@@ -52,7 +52,6 @@ public class PostBasicDto {
                 .postType(postDetailRequest.getPostType())
                 .address(postDetailRequest.getAddress())
                 .runningTime(postDetailRequest.getRunningTime())
-                .userUuid(postDetailRequest.getPostUuid())
                 .postStatus(postDetailRequest.getPostStatus())
                 .postUuid(postDetailRequest.getPostUuid())
                 .build();

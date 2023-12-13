@@ -25,8 +25,9 @@ public class PostController {
     @GetMapping("/api/post/recommend")
     public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam @NotBlank PostType postType){
         // 프로필 서비스에서 프로필에 설정된 스택 리스트 가져와야 함.
+        List<String> tmpStacks = getTmpProfileStackList(); // 임시 프로필 데이터
         // stack List
-        return new ResponseEntity<>(postService.getRecommendPostList(postType,getTmpProfileStackList()),HttpStatus.OK);
+        return new ResponseEntity<>(postService.getRecommendPostList(postType,tmpStacks),HttpStatus.OK);
     }
 
     // 포스트 리스트 조회 ( 포스트 검색 페이지 )
@@ -72,7 +73,7 @@ public class PostController {
         return new ResponseEntity<>(responseDelete,HttpStatus.OK);
     }
 
-    // 포스트 상세 업데이트
+    // 포스트 상테 업데이트
     @PutMapping("/api/post/status")
     public ResponseEntity<PostCommentResponse> updatePostStatus(@RequestBody PostStatusRequest postStatusRequest){
         String postUuid = postService.updateStatus(postStatusRequest);

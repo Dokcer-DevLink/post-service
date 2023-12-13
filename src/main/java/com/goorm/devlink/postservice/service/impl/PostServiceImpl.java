@@ -40,8 +40,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostSimpleResponse> getMyPostList(String userUuid) {
-        PageRequest pageRequest = PageRequest.of(0,5);
-        //PageRequest pageRequest = PageRequest.of(0,5,Sort.by(Sort.Direction.DESC,"createdDate")); //Auditing 추가시 활성화
+        PageRequest pageRequest = PageRequest.of(0,5,Sort.by(Sort.Direction.DESC,"createdDate")); //Auditing 추가시 활성화
         Page<PostEntity> postPage = postRepository.findByUserUuid(userUuid,pageRequest);
         return postPage.map( post -> PostSimpleResponse.getInstance(post) );
     }
