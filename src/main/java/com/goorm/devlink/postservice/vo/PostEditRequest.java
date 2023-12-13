@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -13,22 +14,22 @@ import java.util.List;
 @Builder
 public class PostEditRequest {
 
-    @NotBlank(message = "{required.request}")
+    @NotBlank(message = "{request.required}")
     private String postTitle;
-    @NotBlank(message = "{required.request}")
+    @NotBlank(message = "{request.required}")
     private String postImageUrl;
     private String PostContent;
     private List<String> stacks;
-    @NotBlank(message = "{required.request}")
+    @NotNull(message = "{request.required}")
     private OnOffline onOffline;
-    @NotBlank(message = "{required.request}")
+    @NotNull(message = "{request.required}")
     private PostType postType;
-    @NotBlank(message = "{required.request}")
+    @NotNull(message = "{request.required}")
     private PostStatus postStatus;
     private String address;
-    @NotBlank(message = "{required.request}")
+    @NotBlank(message = "{request.required}")
     private String runningTime;
-    @NotBlank(message = "{required.request}")
+    @NotBlank(message = "{request.required}")
     private String postUuid;
 
 
