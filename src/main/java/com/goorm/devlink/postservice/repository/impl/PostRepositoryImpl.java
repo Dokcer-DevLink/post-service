@@ -20,7 +20,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public PostRepositoryImpl(EntityManager entityManager){
         queryFactory = new JPAQueryFactory(entityManager);
     }
-    @Override
+    @Override // 무한스크롤 ( Slice )
     public Page<PostEntity> findPostListByPostTypeAndKeyWord(PostType postType, String keyword, Pageable pageable) {
 
         List<PostEntity> postList = queryFactory
