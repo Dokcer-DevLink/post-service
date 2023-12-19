@@ -5,11 +5,9 @@ import com.goorm.devlink.postservice.service.PostService;
 import com.goorm.devlink.postservice.util.MessageUtil;
 import com.goorm.devlink.postservice.vo.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.MessageCodesResolver;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

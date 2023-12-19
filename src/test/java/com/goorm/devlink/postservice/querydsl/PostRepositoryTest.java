@@ -50,16 +50,16 @@ public class PostRepositoryTest {
 
         List<PostEntity> postList = new ArrayList<>();
 
-        for(int i =0;i<10;i++){
-            PostEntity postEntity = PostEntity.getInstanceTest(i, PostType.MENTOR, userUuids.get((i % 3)),stackNameList);
-
-            postRepository.save(postEntity);
-        }
-
-        for(int i =10;i<20;i++){
-            PostEntity postEntity = PostEntity.getInstanceTest(i, PostType.MENTEE, userUuids.get((i % 3)),stackNameList);
-            postRepository.save(postEntity);
-        }
+//        for(int i =0;i<10;i++){
+//            PostEntity postEntity = PostEntity.getInstanceTest(i, PostType.MENTOR, userUuids.get((i % 3)),stackNameList);
+//
+//            postRepository.save(postEntity);
+//        }
+//
+//        for(int i =10;i<20;i++){
+//            PostEntity postEntity = PostEntity.getInstanceTest(i, PostType.MENTEE, userUuids.get((i % 3)),stackNameList);
+//            postRepository.save(postEntity);
+//        }
 
         em.flush();
         em.clear();

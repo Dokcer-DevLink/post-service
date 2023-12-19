@@ -9,7 +9,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -54,27 +53,9 @@ public class PostEntity extends BaseTimeEntity{
     public void updateForMerge(long postId) {
         id = postId;
     }
-
-    // 테스트용 메소드
-    public static PostEntity getInstanceTest(int i,PostType postType, String userUuid,List<String> stacks){
-        PostEntity postEntity = new PostEntity();
-        postEntity.setPostTitle("Title"+i);
-        postEntity.setPostContent(("Content"+i));
-        postEntity.setUserUuid(userUuid);
-        postEntity.setPostUuid(UUID.randomUUID().toString());
-        postEntity.setPostType(PostType.MENTOR);
-        postEntity.setPostStatus(PostStatus.WAITING);
-        postEntity.setPostImageUrl("default_image_url");
-        postEntity.setAddress("address"+i);
-        postEntity.setRunningTime(30);
-        postEntity.setDeleted(false);
-        postEntity.stacks = stacks;
-
-        return postEntity;
-    }
-
-
     public void updateStatus(PostStatus postStatus) {
         this.postStatus = postStatus;
     }
+
+
 }

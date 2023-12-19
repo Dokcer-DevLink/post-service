@@ -1,6 +1,5 @@
 package com.goorm.devlink.postservice.exception;
 
-
 import com.goorm.devlink.postservice.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.UnexpectedTypeException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,7 +25,7 @@ public class ControllerExceptionAdvice {
     private final MessageUtil messageUtil;
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ErrorResult> methodNoSuchElementExceptionHandler(NoSuchElementException exception,
+    public ResponseEntity<ErrorResult> noSuchElementExceptionHandler(NoSuchElementException exception,
                                                                            HttpServletRequest request){
 
         return new ResponseEntity<>(ErrorResult.getInstance(exception.getMessage(),request.getRequestURL().toString()),
@@ -36,7 +33,7 @@ public class ControllerExceptionAdvice {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResult> methodMethodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException exception,
+    public ResponseEntity<ErrorResult> methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException exception,
                                                                                         HttpServletRequest request){
         String errorMessage =
                 messageUtil.getEnumTypeMisMatchMessage(exception.getName(),exception.getValue().toString());
@@ -45,14 +42,14 @@ public class ControllerExceptionAdvice {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResult> methodHttpMessageNotReadableExceptionHandler(HttpMessageNotReadableException exception,
+    public ResponseEntity<ErrorResult> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException exception,
                                                                                     HttpServletRequest request){
         return new ResponseEntity<>(ErrorResult.getInstance(exception.getMessage(),
                 request.getRequestURL().toString()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResult> methodMethodArgumentNotValidException(MethodArgumentNotValidException exception,
+    public ResponseEntity<ErrorResult> methodArgumentNotValidException(MethodArgumentNotValidException exception,
                                                                             HttpServletRequest request){
         return new ResponseEntity<>(ErrorResult.getInstance(getMethodArgumentNotValidMessage(exception),
                 request.getRequestURL().toString()), HttpStatus.BAD_REQUEST);
