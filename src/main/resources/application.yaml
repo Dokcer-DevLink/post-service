@@ -34,8 +34,8 @@ cloud:
     s3:
       bucket: devlink-s3-post-bucket
     credentials:
-      access-key: AKIAVU53PT5H7OPXPHP7
-      secret-key: 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
+      access-key:
+      secret-key:
     region:
       static: ap-northeast-2
       auto: false
