@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class PostController {
         return new ResponseEntity<>(postService.getMyPostList(postType,userUuid), HttpStatus.OK);
     }
 
-    //포스트 리스트 조회 ( 상세페이지 )
+    //포스트 상세 조회 ( 상세페이지 )
     @GetMapping("/api/post")
     public ResponseEntity<PostDetailResponse> getPostDetail(@RequestParam String postUuid){
         if(postUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getPostUuidEmptyMessage());}
@@ -61,10 +62,13 @@ public class PostController {
 
     // 포스트 생성하기
     @PostMapping("/api/post")
-    public ResponseEntity<PostCommentResponse> createPost(@RequestBody @Valid PostCreateRequest postCreateRequest,
+    public ResponseEntity<PostCommentResponse> createPost(@RequestPart @Valid PostCreateRequest postCreateRequest,
+                                                          @RequestPart("postImage") MultipartFile postImage,
                                                           @RequestHeader("userUuid") String userUuid){
+        //멀티파트파일 empty 체크
         if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
-        String postUuid = postService.createPost(PostBasicDto.getInstanceForCreate(postCreateRequest,userUuid));
+        String postImageUrl = postService.savePostImageToS3Bucket(postImage);
+        String postUuid = postService.createPost(PostBasicDto.getInstanceForCreate(postCreateRequest,postImageUrl,userUuid));
         return new ResponseEntity<>(PostCommentResponse.getInstanceForCreate(postUuid),HttpStatus.CREATED);
     }
 

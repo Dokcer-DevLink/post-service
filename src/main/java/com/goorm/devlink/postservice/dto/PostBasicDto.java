@@ -23,10 +23,10 @@ public class PostBasicDto {
     private PostStatus postStatus;
 
 
-    public static PostBasicDto getInstanceForCreate(PostCreateRequest postCreateRequest, String userUuid){
+    public static PostBasicDto getInstanceForCreate(PostCreateRequest postCreateRequest, String postImageUrl, String userUuid){
         return PostBasicDto.builder()
                 .postTitle(postCreateRequest.getPostTitle())
-                .postImageUrl(postCreateRequest.getPostImageUrl())
+                .postImageUrl(postImageUrl)
                 .postContent(postCreateRequest.getPostContent())
                 .stacks(postCreateRequest.getStacks())
                 .onOffline(postCreateRequest.getOnOffline())

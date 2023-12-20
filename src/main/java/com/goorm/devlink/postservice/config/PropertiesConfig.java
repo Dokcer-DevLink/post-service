@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(PageConfigProperties.class)
+@EnableConfigurationProperties({PageConfigProperties.class})
 @RequiredArgsConstructor
 public class PropertiesConfig {
 
@@ -17,7 +17,11 @@ public class PropertiesConfig {
 
     @Bean
     public PageConfigVo pageConfigVo(){
-        return new PageConfigVo(pageConfigProperties.getOffset(), pageConfigProperties.getSize(),
+        return new PageConfigVo(pageConfigProperties.getOffset(),
+                pageConfigProperties.getSize(),
                 pageConfigProperties.getOrderBy());
     }
+
+
+
 }

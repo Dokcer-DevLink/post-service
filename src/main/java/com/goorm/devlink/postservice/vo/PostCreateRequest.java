@@ -16,8 +16,6 @@ public class PostCreateRequest {
 
     @NotBlank(message = "{request.required}")
     private String postTitle;
-    @NotBlank(message = "{request.required}")
-    private String postImageUrl;
     private String PostContent;
     private List<String> stacks;
     @NotNull(message = "{request.required}")

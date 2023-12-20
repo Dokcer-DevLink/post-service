@@ -22,5 +22,13 @@ public class PostServiceConfig {
 
     @Bean
     public MessageUtil messageUtil(MessageSource messageSource){return new MessageUtil(messageSource);}
+
+
+
+
+
+
 }
+
+
 

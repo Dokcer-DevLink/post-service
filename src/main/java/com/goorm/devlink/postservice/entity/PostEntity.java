@@ -47,7 +47,7 @@ public class PostEntity extends BaseTimeEntity{
     private boolean isDeleted;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "stack", joinColumns = @JoinColumn(name = "post_id"))
+    @CollectionTable(name = "post_stack", joinColumns = @JoinColumn(name = "post_id"))
     private List<String> stacks = new ArrayList<>();
 
     public void updateForMerge(long postId) {
