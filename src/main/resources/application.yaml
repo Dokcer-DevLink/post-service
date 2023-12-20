@@ -10,9 +10,9 @@ spring:
   messages:
     basename: errors
   datasource:
-    url: jdbc:mysql://localhost:3306/post
-    username: root
-    password: 1234
+    url: jdbc:mysql://localhost:3306/devlink-database
+    username: devlink-user
+    password: devlink-user
     driver-class-name: com.mysql.cj.jdbc.Driver
   h2:
     console:

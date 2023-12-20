@@ -1,6 +1,7 @@
 package com.goorm.devlink.postservice.controller;
 
 import com.goorm.devlink.postservice.dto.PostBasicDto;
+import com.goorm.devlink.postservice.feign.ProfileServiceClient;
 import com.goorm.devlink.postservice.service.PostService;
 import com.goorm.devlink.postservice.util.MessageUtil;
 import com.goorm.devlink.postservice.vo.*;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -23,6 +23,7 @@ public class PostController {
 
     private final PostService postService;
     private final MessageUtil messageUtil;
+    private final ProfileServiceClient profileServiceClient;
 
     @GetMapping("/api/post/test")
     public String test(@RequestParam String postType){
@@ -31,11 +32,10 @@ public class PostController {
 
     // 추천 멘토 포스트, 멘티 포스트 조회
     @GetMapping("/api/post/recommend")
-    public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam PostType postType){
-        // 프로필 서비스에서 스택리스트 가져오는 로직 필요
-        List<String> tmpStacks = getTmpProfileStackList(); // 임시 프로필 데이터
-        // stack List
-        return new ResponseEntity<>(postService.getRecommendPostList(postType,tmpStacks),HttpStatus.OK);
+    public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam PostType postType,@RequestHeader("userUuid") String userUuid){
+        if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
+        List<String> userStacks = profileServiceClient.viewUserStackList(userUuid); // 서비스 간 통신
+        return new ResponseEntity<>(postService.getRecommendPostList(postType,userStacks),HttpStatus.OK);
     }
 
     // 포스트 리스트 조회 ( 포스트 검색 페이지 )
@@ -97,15 +97,5 @@ public class PostController {
         return new ResponseEntity<>(responseUpdate,HttpStatus.OK);
 
     }
-
-    // 임시 프로필에서 가져온 스택리스트 데이터
-    private List<String> getTmpProfileStackList(){
-        List<String> stacks = new ArrayList<>();
-        stacks.add("Spring");
-        stacks.add("K8S");
-        stacks.add("AWS");
-        return stacks;
-    }
-
 
 }
