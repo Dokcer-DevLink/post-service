@@ -14,10 +14,16 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor( access = AccessLevel.PROTECTED)
+@SequenceGenerator(
+        name="POST_SEQ_GENERATOR",
+        sequenceName = "POST_SEQ",
+        initialValue = 1, allocationSize = 1
+)
 public class PostEntity extends BaseTimeEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                    generator = "POST_SEQ_GENERATOR")
     @Column(name = "post_id")
     private Long id;
     @Column(name = "post_title")
