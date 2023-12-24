@@ -13,12 +13,13 @@ import java.util.List;
 @Setter
 @Builder
 public class PostEditRequest {
-
+    @NotBlank(message = "{request.required}")
+    private String postUuid;
     @NotBlank(message = "{request.required}")
     private String postTitle;
     @NotBlank(message = "{request.required}")
     private String postImageUrl;
-    private String PostContent;
+    private String postContent;
     private List<String> stacks;
     @NotNull(message = "{request.required}")
     private OnOffline onOffline;
@@ -29,8 +30,7 @@ public class PostEditRequest {
     private String address;
     @NotBlank(message = "{request.required}")
     private String runningTime;
-    @NotBlank(message = "{request.required}")
-    private String postUuid;
+
 
 
 }
