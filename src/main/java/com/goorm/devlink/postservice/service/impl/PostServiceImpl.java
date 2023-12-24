@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -36,13 +37,6 @@ public class PostServiceImpl implements PostService {
     private final ModelMapperUtil modelMapperUtil;
     private final MessageUtil messageUtil;
     private final AwsUtil awsUtil;
-
-    @Override
-    public String createPost(PostBasicDto postBasicDto) {
-        PostEntity postEntity = modelMapperUtil.convertToPostEntity(postBasicDto);
-        postRepository.save(postEntity);
-        return postEntity.getPostUuid();
-    }
 
     @Override
     public Page<PostSimpleResponse> getPostList(PostType postType, String keyword) {
@@ -67,6 +61,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public PostDetailResponse getDetailPost(String postUuid) {
+        return modelMapperUtil.convertToPostDetailResponse(findPostEntity(postUuid));
+    }
+
+    @Override
+    @Transactional
+    public String createPost(PostBasicDto postBasicDto) {
+        PostEntity postEntity = modelMapperUtil.convertToPostEntity(postBasicDto);
+        postRepository.save(postEntity);
+        return postEntity.getPostUuid();
+    }
+
+    @Override
+    @Transactional
     public void editPost(PostBasicDto instanceForEdit) {
         PostEntity findPostEntity = findPostEntity(instanceForEdit.getPostUuid());
         PostEntity postEntity = modelMapperUtil.convertToPostEntity(instanceForEdit);
@@ -75,16 +83,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public void deletePost(String postUuid) {
         postRepository.delete(findPostEntity(postUuid));
     }
 
     @Override
-    public PostDetailResponse getDetailPost(String postUuid) {
-        return modelMapperUtil.convertToPostDetailResponse(findPostEntity(postUuid));
-    }
-
-    @Override
+    @Transactional
     public String updateStatus(PostStatusRequest postStatusRequest) {
         PostEntity findPost = findPostEntity(postStatusRequest.getPostUuid());
         findPost.updateStatus(postStatusRequest.getPostStatus());
@@ -98,8 +103,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private PostEntity findPostEntity(String postUuid){
-        return Optional.ofNullable(postRepository.findByPostUuid(postUuid))
-                .orElseThrow(() -> {
+        return postRepository.findByPostUuid(postUuid).orElseThrow(() -> {
                     throw new NoSuchElementException(messageUtil.getPostUuidNoSuchMessage(postUuid));
                 });
     }
