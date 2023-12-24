@@ -32,7 +32,6 @@ public class AwsUtil {
                     postImage.getOriginalFilename(), postImage.getInputStream(), metadata);
         } catch (IOException e) {
             throw new RuntimeException(e);
-
         }
     }
 

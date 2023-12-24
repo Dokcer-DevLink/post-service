@@ -14,14 +14,15 @@ public class MessageUtil {
     public String getUserUuidEmptyMessage(){
         return getMessage("request.empty.userUuid");
     }
-
     public String getPostUuidEmptyMessage(){
         return getMessage("request.empty.postUuid");
     }
+    public String getFeignErrorMessage(){ return getMessage("request.feign.connect");}
 
     public String getPostUuidNoSuchMessage(String postUuid){
         return getMessage("request.nosuchelement.postUuid",new String[]{postUuid});
     }
+
     public String getEnumTypeMisMatchMessage(String errorEnum, String errorValue){
         switch(errorEnum){
             case "postType" : return getMessage("request.typemismatch.postType",new String[]{errorValue});
