@@ -7,11 +7,9 @@ import com.goorm.devlink.postservice.util.MessageUtil;
 import com.goorm.devlink.postservice.vo.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -35,14 +33,14 @@ public class PostController {
     public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam PostType postType,@RequestHeader("userUuid") String userUuid){
         if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
         List<String> userStacks = profileServiceClient.viewUserStackList(userUuid); // 서비스 간 통신
-        return new ResponseEntity<>(postService.getRecommendPostList(postType,userStacks),HttpStatus.OK);
+        return ResponseEntity.ok(postService.getRecommendPostList(postType,userStacks));
     }
 
     // 포스트 리스트 조회 ( 포스트 검색 페이지 )
     @GetMapping("/api/post/list")
     public ResponseEntity<Page<PostSimpleResponse>> getPostList(@RequestParam PostType postType,
                                                                 @RequestParam String keyword){
-        return new ResponseEntity<>(postService.getPostList(postType,keyword), HttpStatus.OK);
+        return ResponseEntity.ok(postService.getPostList(postType,keyword));
     }
 
     // 포스트 리스트 조회 ( 마이페이지 )
@@ -50,14 +48,14 @@ public class PostController {
     public ResponseEntity<Page<PostSimpleResponse>> getMyPostList(@RequestParam PostType postType,
                                                                   @RequestHeader("userUuid") String userUuid){
         if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
-        return new ResponseEntity<>(postService.getMyPostList(postType,userUuid), HttpStatus.OK);
+        return ResponseEntity.ok(postService.getMyPostList(postType,userUuid));
     }
 
     //포스트 상세 조회 ( 상세페이지 )
     @GetMapping("/api/post")
     public ResponseEntity<PostDetailResponse> getPostDetail(@RequestParam String postUuid){
         if(postUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getPostUuidEmptyMessage());}
-        return new ResponseEntity<>(postService.getDetailPost(postUuid),HttpStatus.OK);
+        return ResponseEntity.ok(postService.getDetailPost(postUuid));
     }
 
     // 포스트 생성하기
@@ -69,7 +67,7 @@ public class PostController {
         if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
         String postImageUrl = postService.savePostImageToS3Bucket(postImage);
         String postUuid = postService.createPost(PostBasicDto.getInstanceForCreate(postCreateRequest,postImageUrl,userUuid));
-        return new ResponseEntity<>(PostCommentResponse.getInstanceForCreate(postUuid),HttpStatus.CREATED);
+        return ResponseEntity.ok(PostCommentResponse.getInstanceForCreate(postUuid));
     }
 
     // 포스트 수정하기 ( 포스트 상세 페이지 )
@@ -77,7 +75,7 @@ public class PostController {
     public ResponseEntity<PostCommentResponse> editPost(@RequestBody @Valid PostEditRequest postEditRequest){
         postService.editPost(PostBasicDto.getInstanceForEdit(postEditRequest));
         PostCommentResponse responseEdit = PostCommentResponse.getInstanceForEdit(postEditRequest.getPostUuid());
-        return new ResponseEntity<>(responseEdit, HttpStatus.OK);
+        return ResponseEntity.ok(responseEdit);
     }
 
     // 포스트 삭제하기
@@ -86,7 +84,7 @@ public class PostController {
         if(postUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getPostUuidEmptyMessage());}
         postService.deletePost(postUuid);
         PostCommentResponse responseDelete = PostCommentResponse.getInstanceForDelete(postUuid);
-        return new ResponseEntity<>(responseDelete,HttpStatus.OK);
+        return ResponseEntity.ok(responseDelete);
     }
 
     // 포스트 상테 업데이트
@@ -94,8 +92,7 @@ public class PostController {
     public ResponseEntity<PostCommentResponse> updatePostStatus(@RequestBody @Valid PostStatusRequest postStatusRequest){
         String postUuid = postService.updateStatus(postStatusRequest);
         PostCommentResponse responseUpdate = PostCommentResponse.getInstanceForUpdate(postUuid);
-        return new ResponseEntity<>(responseUpdate,HttpStatus.OK);
-
+        return ResponseEntity.ok(responseUpdate);
     }
 
 }
