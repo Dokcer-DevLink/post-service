@@ -32,7 +32,7 @@ public class PostController {
     @GetMapping("/api/post/recommend")
     public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam PostType postType,@RequestHeader("userUuid") String userUuid){
         if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
-        List<String> userStacks = profileServiceClient.viewUserStackList(userUuid); // 서비스 간 통신
+        List<String> userStacks = profileServiceClient.viewUserStackList(userUuid).getBody(); // 서비스 간 통신
         return ResponseEntity.ok(postService.getRecommendPostList(postType,userStacks));
     }
 
