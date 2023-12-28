@@ -20,7 +20,7 @@ public class PostDetailResponse {
     private OnOffline onOffline;
     private PostType postType;
     private String address;
-    private String runningTime;
+    private int unitTimeCount;
     private String userUuid;
     private PostStatus postStatus;
 }

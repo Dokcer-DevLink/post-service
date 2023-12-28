@@ -51,8 +51,8 @@ public class PostEntity extends BaseTimeEntity{
     @Embedded
     private Address address;
 
-    @Column(name = "running_time")
-    private int runningTime;
+    @Column(name = "unit_time_count")
+    private int unitTimeCount;
 
     @Column(name = "isDeleted")
     private boolean isDeleted;

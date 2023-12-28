@@ -81,10 +81,12 @@ public class PostController {
 
     // 포스트 수정하기 ( 포스트 상세 페이지 )
     @PutMapping("/api/post")
-    public ResponseEntity<PostCommentResponse> editPost(@RequestBody @Valid PostEditRequest postEditRequest){
+    public ResponseEntity<PostCommentResponse> editPost(@RequestBody @Valid PostEditRequest postEditRequest,
+                                                        @RequestHeader("userUuid") String userUuid){
+        if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
         String imageUrl = getImageUrl(postEditRequest.getPostImage(),postEditRequest.getPostUuid());
         Address address = getAddress(postEditRequest.getAddress());
-        postService.editPost(PostBasicDto.getInstanceForEdit(postEditRequest,address,imageUrl));
+        postService.editPost(PostBasicDto.getInstanceForEdit(postEditRequest,address,imageUrl,userUuid));
         PostCommentResponse responseEdit = PostCommentResponse.getInstanceForEdit(postEditRequest.getPostUuid());
         return ResponseEntity.ok(responseEdit);
     }

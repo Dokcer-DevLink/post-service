@@ -6,9 +6,7 @@ import com.goorm.devlink.postservice.vo.request.PostCreateRequest;
 import com.goorm.devlink.postservice.vo.request.PostEditRequest;
 import lombok.Builder;
 import lombok.Getter;
-
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Builder
@@ -21,7 +19,7 @@ public class PostBasicDto {
     private OnOffline onOffline;
     private PostType postType;
     private Address address;
-    private String runningTime;
+    private int unitTimeCount;
     private String userUuid;
     private PostStatus postStatus;
 
@@ -35,14 +33,14 @@ public class PostBasicDto {
                 .onOffline(postCreateRequest.getOnOffline())
                 .postType(postCreateRequest.getPostType())
                 .address(address)
-                .runningTime(postCreateRequest.getRunningTime())
+                .unitTimeCount(postCreateRequest.getUnitTimeCount())
                 .userUuid(userUuid)
                 .postUuid(postUuid)
                 .postStatus(PostStatus.WAITING)
                 .build();
     }
 
-    public static PostBasicDto getInstanceForEdit(PostEditRequest postEditRequest, Address address,String postImageUrl){
+    public static PostBasicDto getInstanceForEdit(PostEditRequest postEditRequest, Address address,String postImageUrl,String userUuid){
         return PostBasicDto.builder()
                 .postTitle(postEditRequest.getPostTitle())
                 .postImageUrl(postImageUrl)
@@ -51,9 +49,10 @@ public class PostBasicDto {
                 .onOffline(postEditRequest.getOnOffline())
                 .postType(postEditRequest.getPostType())
                 .address(address)
-                .runningTime(postEditRequest.getRunningTime())
+                .unitTimeCount(postEditRequest.getUnitTimeCount())
                 .postStatus(postEditRequest.getPostStatus())
                 .postUuid(postEditRequest.getPostUuid())
+                .userUuid(userUuid)
                 .build();
     }
 }

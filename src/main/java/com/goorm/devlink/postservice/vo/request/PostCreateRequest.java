@@ -25,8 +25,7 @@ public class PostCreateRequest {
     @NotNull(message = "{request.required}")
     private PostType postType;
     private String address;
-    @NotBlank(message = "{request.required}")
-    private String runningTime;
+    private int unitTimeCount;
     private String postImage;
 
 

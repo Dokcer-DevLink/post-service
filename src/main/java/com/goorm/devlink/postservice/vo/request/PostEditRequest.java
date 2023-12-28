@@ -36,8 +36,7 @@ public class PostEditRequest {
 
     private String address;
 
-    @NotBlank(message = "{request.required}")
-    private String runningTime;
+    private int unitTimeCount;
 
     private String postImage;
 
