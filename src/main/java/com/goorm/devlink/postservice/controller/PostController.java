@@ -76,7 +76,7 @@ public class PostController {
         if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
         String postUuid = UUID.randomUUID().toString();
         String imageUrl = getImageUrl(postCreateRequest.getPostImage(),postUuid);
-        Address address = postService.createAddress(postCreateRequest.getAddress());
+        Address address = getAddress(postCreateRequest.getAddress());
         postService.createPost(PostBasicDto.getInstanceForCreate(postCreateRequest,postUuid,imageUrl,userUuid,address));
         return ResponseEntity.ok(PostCommentResponse.getInstanceForCreate(postUuid));
     }
@@ -85,7 +85,7 @@ public class PostController {
     @PutMapping("/api/post")
     public ResponseEntity<PostCommentResponse> editPost(@RequestBody @Valid PostEditRequest postEditRequest){
         String imageUrl = getImageUrl(postEditRequest.getPostImage(),postEditRequest.getPostUuid());
-        Address address = postService.createAddress(postEditRequest.getAddress());
+        Address address = getAddress(postEditRequest.getAddress());
         postService.editPost(PostBasicDto.getInstanceForEdit(postEditRequest,address,imageUrl));
         PostCommentResponse responseEdit = PostCommentResponse.getInstanceForEdit(postEditRequest.getPostUuid());
         return ResponseEntity.ok(responseEdit);
@@ -109,12 +109,18 @@ public class PostController {
     }
 
     private String getImageUrl(String postImage, String postUuid){
-        if(!postImage.isEmpty()) {
+        if(postImage!=null&&!postImage.isEmpty()) {
             S3ImageVo s3ImageVo = S3ImageVo.getInstance(postImage,postUuid);
-            if(!S3ImageVo.isValid(s3ImageVo.getContentType())) { throw new IllegalArgumentException();}
+            if(!S3ImageVo.isValid(s3ImageVo.getContentType())) {
+                throw new IllegalArgumentException(messageUtil.getS3ImageTypeErrorMessage(s3ImageVo.getContentType()));}
             return postService.savePostImageToS3Bucket(s3ImageVo);
         }
         return S3ImageVo.DEFAULT_URL;
     }
+
+    private Address getAddress(String address){
+        return (address != null && !address.isEmpty()) ? postService.createAddress(address) : null;
+    }
+
 
 }

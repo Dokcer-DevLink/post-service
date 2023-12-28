@@ -17,12 +17,15 @@ public class MessageUtil {
     public String getPostUuidEmptyMessage(){
         return getMessage("request.empty.postUuid");
     }
-    public String getFeignErrorMessage(){ return getMessage("request.feign.connect");}
-
+    public String getFeignErrorMessage(){
+        return getMessage("request.feign.connect");
+    }
     public String getPostUuidNoSuchMessage(String postUuid){
         return getMessage("request.nosuchelement.postUuid",new String[]{postUuid});
     }
-
+    public String getIllegalAddressMessage(String location) {
+        return getMessage("request.illegal.address",new String[]{location});
+    }
     public String getEnumTypeMisMatchMessage(String errorEnum, String errorValue){
         switch(errorEnum){
             case "postType" : return getMessage("request.typemismatch.postType",new String[]{errorValue});
@@ -39,7 +42,7 @@ public class MessageUtil {
     }
 
 
-
-
-
+    public String getS3ImageTypeErrorMessage(String contentType) {
+        return getMessage("request.type.image",new String[]{contentType});
+    }
 }

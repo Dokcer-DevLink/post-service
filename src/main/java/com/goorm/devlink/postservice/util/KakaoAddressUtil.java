@@ -2,9 +2,11 @@ package com.goorm.devlink.postservice.util;
 
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.goorm.devlink.postservice.config.properties.vo.KakaoAddressVo;
+import com.goorm.devlink.postservice.entity.Address;
 import feign.form.util.CharsetUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -13,21 +15,17 @@ import org.springframework.http.RequestEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 public class KakaoAddressUtil {
 
     private final KakaoAddressVo kakaoAddressVo;
     private final RestTemplate restTemplate;
+    private final MessageUtil messageUtil;
 
-    public List<String> findAddressList(String location){
-        // 에러처리 필요
+    public Address createAddress(String location){
         String response = restTemplate.exchange(request(location),String.class).getBody();
-        System.out.println(response);
-        return parseResponse(response);
-
+        return parseResponse(response,location);
     }
 
     private RequestEntity request(String location){
@@ -46,8 +44,8 @@ public class KakaoAddressUtil {
                 .build()
                 .toUri();
     }
-    private List<String> parseResponse(String response){
-        return convertJsonArrayToList(getJsonArray(response));
+    private Address parseResponse(String response,String location){
+        return convertJsonToAddress(getJsonArray(response),location);
     }
 
     private JsonArray getJsonArray(String response){
@@ -56,15 +54,15 @@ public class KakaoAddressUtil {
         return parsedResponse.get("documents").getAsJsonArray();
     }
 
-    private List<String> convertJsonArrayToList(JsonArray jsonArray){
-        List<String> result = new ArrayList<>();
-        jsonArray.forEach(jsonElement -> {
-            String address = jsonElement.getAsJsonObject().get("address")
-                    .getAsJsonObject().get("address_name")
-                    .toString().replaceAll("\"","");
-            result.add(address);
-        });
-        return result;
+    private Address convertJsonToAddress(JsonArray jsonArray, String location){
+        if(jsonArray.isEmpty()){ throw new IllegalArgumentException(messageUtil.getIllegalAddressMessage(location)); } // 에러처리하기
+        JsonElement jsonElement = jsonArray.get(0);
+        JsonObject jsonResponse = jsonElement.getAsJsonObject().get("address").getAsJsonObject();
+        String x = jsonResponse.get("x").toString().replaceAll("\"","");
+        String y = jsonResponse.get("y").toString().replaceAll("\"","");
+
+        return Address.getInstance(location,Double.valueOf(x),Double.valueOf(y));
+
     }
 
 }

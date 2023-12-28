@@ -6,6 +6,7 @@ import com.goorm.devlink.postservice.entity.PostEntity;
 import com.goorm.devlink.postservice.repository.PostRepository;
 import com.goorm.devlink.postservice.service.PostService;
 import com.goorm.devlink.postservice.util.AwsUtil;
+import com.goorm.devlink.postservice.util.KakaoAddressUtil;
 import com.goorm.devlink.postservice.util.MessageUtil;
 import com.goorm.devlink.postservice.util.ModelMapperUtil;
 import com.goorm.devlink.postservice.vo.S3ImageVo;
@@ -32,6 +33,7 @@ public class PostServiceImpl implements PostService {
     private final ModelMapperUtil modelMapperUtil;
     private final MessageUtil messageUtil;
     private final AwsUtil awsUtil;
+    private final KakaoAddressUtil kakaoAddressUtil;
 
     @Override
     public Page<PostSimpleResponse> getPostList(PostType postType, String keyword) {
@@ -99,7 +101,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Address createAddress(String address) {
-        return null;
+        return kakaoAddressUtil.createAddress(address);
     }
 
     private PostEntity findPostEntity(String postUuid){

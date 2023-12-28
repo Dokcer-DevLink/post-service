@@ -3,6 +3,7 @@ package com.goorm.devlink.postservice.config;
 import com.goorm.devlink.postservice.config.properties.KakaoAddressProperties;
 import com.goorm.devlink.postservice.config.properties.vo.KakaoAddressVo;
 import com.goorm.devlink.postservice.util.KakaoAddressUtil;
+import com.goorm.devlink.postservice.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,7 @@ public class KakaoConfig {
     }
 
     @Bean
-    public KakaoAddressUtil kakaoAddressUtil(KakaoAddressVo kakaoAddressVo){
-        return new KakaoAddressUtil(kakaoAddressVo, new RestTemplate());
+    public KakaoAddressUtil kakaoAddressUtil(KakaoAddressVo kakaoAddressVo, MessageUtil messageUtil){
+        return new KakaoAddressUtil(kakaoAddressVo, new RestTemplate(),messageUtil);
     }
 }

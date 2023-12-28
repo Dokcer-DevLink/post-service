@@ -4,7 +4,6 @@ package com.goorm.devlink.postservice.exception;
 import com.goorm.devlink.postservice.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,8 +22,8 @@ public class ServiceExceptionAdvice {
     public ResponseEntity<ErrorResult> methodNoSuchElementExceptionHandler(NoSuchElementException exception,
                                                                            HttpServletRequest request){
 
-        return new ResponseEntity<>(ErrorResult.getInstance(exception.getMessage(),request.getRequestURL().toString()),
-                HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest()
+                .body(ErrorResult.getInstance(exception.getMessage(),request.getRequestURL().toString()));
     }
 
 }
