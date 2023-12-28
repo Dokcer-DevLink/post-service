@@ -31,26 +31,13 @@ spring:
     defer-datasource-initialization: true
     generate-ddl: true
 
-#cloud:
-#  aws:
-#    s3:
-#      bucket: ${S3_BUCKET_NAME}
-#    credentials:
-#      access-key: ${S3_ACCESS_KEY}
-#      secret-key: ${S3_SECRET_KEY}
-#    region:
-#      static: ap-northeast-2
-#      auto: false
-#    stack:
-#      auto: false
-
 cloud:
   aws:
     s3:
-      bucket: testbucket-20231214-a1
+      bucket: ${S3_BUCKET_NAME}
     credentials:
-      access-key: AKIAYLD63U3AR4OUBGX6
-      secret-key: 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
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
     region:
       static: ap-northeast-2
       auto: false
@@ -64,7 +51,7 @@ data:
     orderBy: createdDate
   kakao:
     address:
-      secretKey: KakaoAK f734b3868de26edbf8f0b6918c5ff8d8
+      secretKey: ${KAKAO_SECRET_KEY}
       url: https://dapi.kakao.com/v2/local/search/address
 
 eureka:
