@@ -1,18 +1,27 @@
 package com.goorm.devlink.postservice.controller;
 
 import com.goorm.devlink.postservice.dto.PostBasicDto;
+import com.goorm.devlink.postservice.entity.Address;
 import com.goorm.devlink.postservice.feign.ProfileServiceClient;
 import com.goorm.devlink.postservice.service.PostService;
 import com.goorm.devlink.postservice.util.MessageUtil;
 import com.goorm.devlink.postservice.vo.*;
+import com.goorm.devlink.postservice.vo.request.PostCreateRequest;
+import com.goorm.devlink.postservice.vo.request.PostEditRequest;
+import com.goorm.devlink.postservice.vo.request.PostStatusRequest;
+import com.goorm.devlink.postservice.vo.response.PostCommentResponse;
+import com.goorm.devlink.postservice.vo.response.PostDetailResponse;
+import com.goorm.devlink.postservice.vo.response.PostSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.Valid;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,8 +39,10 @@ public class PostController {
 
     // 추천 멘토 포스트, 멘티 포스트 조회
     @GetMapping("/api/post/recommend")
-    public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam PostType postType,@RequestHeader("userUuid") String userUuid){
+    public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam PostType postType, @RequestHeader("userUuid") String userUuid){
+       // 비회원인경우!!!!
         if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
+
         List<String> userStacks = profileServiceClient.viewUserStackList(userUuid).getBody(); // 서비스 간 통신
         return ResponseEntity.ok(postService.getRecommendPostList(postType,userStacks));
     }
@@ -60,20 +71,22 @@ public class PostController {
 
     // 포스트 생성하기
     @PostMapping("/api/post")
-    public ResponseEntity<PostCommentResponse> createPost(@RequestPart @Valid PostCreateRequest postCreateRequest,
-                                                          @RequestPart("postImage") MultipartFile postImage,
+    public ResponseEntity<PostCommentResponse> createPost(@RequestBody PostCreateRequest postCreateRequest,
                                                           @RequestHeader("userUuid") String userUuid){
-        //멀티파트파일 empty 체크
         if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
-        String postImageUrl = postService.savePostImageToS3Bucket(postImage);
-        String postUuid = postService.createPost(PostBasicDto.getInstanceForCreate(postCreateRequest,postImageUrl,userUuid));
+        String postUuid = UUID.randomUUID().toString();
+        String imageUrl = getImageUrl(postCreateRequest.getPostImage(),postUuid);
+        Address address = postService.createAddress(postCreateRequest.getAddress());
+        postService.createPost(PostBasicDto.getInstanceForCreate(postCreateRequest,postUuid,imageUrl,userUuid,address));
         return ResponseEntity.ok(PostCommentResponse.getInstanceForCreate(postUuid));
     }
 
     // 포스트 수정하기 ( 포스트 상세 페이지 )
     @PutMapping("/api/post")
     public ResponseEntity<PostCommentResponse> editPost(@RequestBody @Valid PostEditRequest postEditRequest){
-        postService.editPost(PostBasicDto.getInstanceForEdit(postEditRequest));
+        String imageUrl = getImageUrl(postEditRequest.getPostImage(),postEditRequest.getPostUuid());
+        Address address = postService.createAddress(postEditRequest.getAddress());
+        postService.editPost(PostBasicDto.getInstanceForEdit(postEditRequest,address,imageUrl));
         PostCommentResponse responseEdit = PostCommentResponse.getInstanceForEdit(postEditRequest.getPostUuid());
         return ResponseEntity.ok(responseEdit);
     }
@@ -93,6 +106,15 @@ public class PostController {
         String postUuid = postService.updateStatus(postStatusRequest);
         PostCommentResponse responseUpdate = PostCommentResponse.getInstanceForUpdate(postUuid);
         return ResponseEntity.ok(responseUpdate);
+    }
+
+    private String getImageUrl(String postImage, String postUuid){
+        if(!postImage.isEmpty()) {
+            S3ImageVo s3ImageVo = S3ImageVo.getInstance(postImage,postUuid);
+            if(!S3ImageVo.isValid(s3ImageVo.getContentType())) { throw new IllegalArgumentException();}
+            return postService.savePostImageToS3Bucket(s3ImageVo);
+        }
+        return S3ImageVo.DEFAULT_URL;
     }
 
 }

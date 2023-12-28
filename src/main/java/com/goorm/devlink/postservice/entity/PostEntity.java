@@ -20,29 +20,40 @@ public class PostEntity extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
+
     @Column(name = "post_title")
     private String  postTitle;
+
     @Column(name = "post_content")
     private String postContent;
+
     @Column(name = "user_uuid")
     private String userUuid;
+
     @Column(name = "post_uuid",unique = true)
     private String postUuid;
+
     @Column(name = "post_type")
     @Enumerated(EnumType.STRING)
     private PostType postType;
+
     @Column(name = "post_status")
     @Enumerated(EnumType.STRING)
     private PostStatus postStatus;
+
     @Column(name = "onOffline")
     @Enumerated(EnumType.STRING)
     private OnOffline onOffline;
+
     @Column(name = "post_image_url")
     private String postImageUrl;
-    @Column(name = "address")
-    private String address;
+
+    @Embedded
+    private Address address;
+
     @Column(name = "running_time")
     private int runningTime;
+
     @Column(name = "isDeleted")
     private boolean isDeleted;
 
