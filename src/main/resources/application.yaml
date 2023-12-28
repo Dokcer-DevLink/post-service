@@ -49,7 +49,10 @@ data:
     offset: 0
     size: 8
     orderBy: createdDate
-
+  kakao:
+    address:
+      secretKey: ${KAKAO_SECRET_KEY}
+      url: https://dapi.kakao.com/v2/local/search/address
 
 eureka:
   instance:

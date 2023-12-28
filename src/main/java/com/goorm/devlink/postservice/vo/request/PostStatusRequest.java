@@ -1,6 +1,7 @@
-package com.goorm.devlink.postservice.vo;
+package com.goorm.devlink.postservice.vo.request;
 
 
+import com.goorm.devlink.postservice.vo.PostStatus;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;

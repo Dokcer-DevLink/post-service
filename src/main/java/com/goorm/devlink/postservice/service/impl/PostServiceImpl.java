@@ -1,32 +1,28 @@
 package com.goorm.devlink.postservice.service.impl;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.goorm.devlink.postservice.config.properties.vo.AwsConfigVo;
 import com.goorm.devlink.postservice.config.properties.vo.PageConfigVo;
 import com.goorm.devlink.postservice.dto.PostBasicDto;
+import com.goorm.devlink.postservice.entity.Address;
 import com.goorm.devlink.postservice.entity.PostEntity;
 import com.goorm.devlink.postservice.repository.PostRepository;
 import com.goorm.devlink.postservice.service.PostService;
 import com.goorm.devlink.postservice.util.AwsUtil;
+import com.goorm.devlink.postservice.util.KakaoAddressUtil;
 import com.goorm.devlink.postservice.util.MessageUtil;
 import com.goorm.devlink.postservice.util.ModelMapperUtil;
-import com.goorm.devlink.postservice.vo.PostDetailResponse;
-import com.goorm.devlink.postservice.vo.PostSimpleResponse;
-import com.goorm.devlink.postservice.vo.PostStatusRequest;
+import com.goorm.devlink.postservice.vo.S3ImageVo;
+import com.goorm.devlink.postservice.vo.response.PostDetailResponse;
+import com.goorm.devlink.postservice.vo.response.PostSimpleResponse;
+import com.goorm.devlink.postservice.vo.request.PostStatusRequest;
 import com.goorm.devlink.postservice.vo.PostType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +33,7 @@ public class PostServiceImpl implements PostService {
     private final ModelMapperUtil modelMapperUtil;
     private final MessageUtil messageUtil;
     private final AwsUtil awsUtil;
+    private final KakaoAddressUtil kakaoAddressUtil;
 
     @Override
     public Page<PostSimpleResponse> getPostList(PostType postType, String keyword) {
@@ -98,8 +95,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public String savePostImageToS3Bucket(MultipartFile postImage) {
-        return awsUtil.savePostImageToS3Bucket(postImage);
+    public String savePostImageToS3Bucket(S3ImageVo s3ImageVo) {
+        return awsUtil.savePostImageToS3Bucket(s3ImageVo);
+    }
+
+    @Override
+    public Address createAddress(String address) {
+        return kakaoAddressUtil.createAddress(address);
     }
 
     private PostEntity findPostEntity(String postUuid){

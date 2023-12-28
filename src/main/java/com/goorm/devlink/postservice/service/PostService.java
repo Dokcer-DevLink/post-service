@@ -1,12 +1,13 @@
 package com.goorm.devlink.postservice.service;
 
 import com.goorm.devlink.postservice.dto.PostBasicDto;
-import com.goorm.devlink.postservice.vo.PostDetailResponse;
-import com.goorm.devlink.postservice.vo.PostSimpleResponse;
-import com.goorm.devlink.postservice.vo.PostStatusRequest;
+import com.goorm.devlink.postservice.entity.Address;
+import com.goorm.devlink.postservice.vo.S3ImageVo;
+import com.goorm.devlink.postservice.vo.response.PostDetailResponse;
+import com.goorm.devlink.postservice.vo.response.PostSimpleResponse;
+import com.goorm.devlink.postservice.vo.request.PostStatusRequest;
 import com.goorm.devlink.postservice.vo.PostType;
 import org.springframework.data.domain.Page;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,5 +21,7 @@ public interface PostService {
     Page<PostSimpleResponse> getMyPostList(PostType postType,String userUuid);
     Page<PostSimpleResponse> getRecommendPostList(PostType postType, List<String> profileStacks);
 
-    String savePostImageToS3Bucket(MultipartFile postImage);
+    String savePostImageToS3Bucket(S3ImageVo s3ImageVo);
+
+    Address createAddress(String address);
 }

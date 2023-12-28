@@ -1,6 +1,8 @@
-package com.goorm.devlink.postservice.vo;
+package com.goorm.devlink.postservice.vo.request;
 
 
+import com.goorm.devlink.postservice.vo.OnOffline;
+import com.goorm.devlink.postservice.vo.PostType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,8 +25,10 @@ public class PostCreateRequest {
     @NotNull(message = "{request.required}")
     private PostType postType;
     private String address;
-    @NotBlank(message = "{request.required}")
-    private String runningTime;
+    private int unitTimeCount;
+    private String postImage;
+
+
 
 
 }

@@ -1,4 +1,4 @@
-package com.goorm.devlink.postservice.vo;
+package com.goorm.devlink.postservice.vo.response;
 
 
 import lombok.Builder;

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -25,6 +26,12 @@ public class ControllerExceptionAdvice {
 
     private final MessageUtil messageUtil;
 
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<ErrorResult> missingRequestHeaderExceptionHandler (MissingRequestHeaderException exception,
+                                                                     HttpServletRequest request){
+        return ResponseEntity.badRequest()
+                .body(ErrorResult.getInstance(exception.getMessage(),request.getRequestURL().toString()));
+    }
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ErrorResult> noSuchElementExceptionHandler(NoSuchElementException exception,
                                                                            HttpServletRequest request){
@@ -60,6 +67,13 @@ public class ControllerExceptionAdvice {
     public ResponseEntity<ErrorResult> feignExceptionHandler(FeignException exception,HttpServletRequest request){
         return ResponseEntity.internalServerError()
                 .body(ErrorResult.getInstance(messageUtil.getFeignErrorMessage(),request.getRequestURL().toString()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResult> illegalArgumentExceptionHandler(IllegalArgumentException exception,
+                                                                       HttpServletRequest request){
+        return ResponseEntity.badRequest()
+                .body(ErrorResult.getInstance(exception.getMessage(),request.getRequestURL().toString()));
     }
 
     private List<String> getMethodArgumentNotValidMessage(MethodArgumentNotValidException ex){

@@ -7,6 +7,8 @@ spring:
   config:
     activate:
       on-profile: kubernetes
+  messages:
+    basename: errors
   datasource:
     url: jdbc:mysql://${DB_SERVER}:${DB_PORT:3306}/${DB_NAME}
     username: ${DB_USERNAME}
@@ -40,6 +42,10 @@ data:
     offset: 0
     size: 8
     orderBy: createdDate
+  kakao:
+    address:
+      secretKey: ${KAKAO_SECRET_KEY}
+      url: https://dapi.kakao.com/v2/local/search/address
 
 eureka:
   client:

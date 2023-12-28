@@ -3,7 +3,7 @@ package com.goorm.devlink.postservice.feign;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -11,6 +11,6 @@ import java.util.List;
 public interface ProfileServiceClient {
 
     @GetMapping("/api/profile/stacks")
-    public ResponseEntity<List<String>> viewUserStackList(@RequestHeader("userUuid") String userUuid);
+    public ResponseEntity<List<String>> viewUserStackList(@RequestParam("userUuid") String userUuid);
 
 }

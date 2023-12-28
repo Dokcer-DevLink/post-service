@@ -1,4 +1,4 @@
-package com.goorm.devlink.postservice.vo;
+package com.goorm.devlink.postservice.vo.response;
 
 
 import com.goorm.devlink.postservice.entity.PostEntity;
@@ -26,7 +26,7 @@ public class PostSimpleResponse {
                 .postTitle(post.getPostTitle())
                 .postImageUrl(post.getPostImageUrl())
                 .stacks(post.getStacks())
-                .address(post.getAddress())
+                .address(post.getAddress().getName())
                 .build();
     }
 

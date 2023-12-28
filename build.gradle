@@ -58,6 +58,7 @@ dependencies {
 
 	// AWS S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'commons-codec:commons-codec'
 
 	// SpringCloud 및 Kubernetes
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -67,6 +68,9 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-client-all'
 	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+
+
+
 }
 
 dependencyManagement {
