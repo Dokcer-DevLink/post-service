@@ -13,19 +13,19 @@ import com.goorm.devlink.postservice.vo.response.PostCommentResponse;
 import com.goorm.devlink.postservice.vo.response.PostDetailResponse;
 import com.goorm.devlink.postservice.vo.response.PostSimpleResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-//@CrossOrigin("*") // 임시로 모든 도메인 CORS 허용
+@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -39,11 +39,9 @@ public class PostController {
 
     // 추천 멘토 포스트, 멘티 포스트 조회
     @GetMapping("/api/post/recommend")
-    public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam PostType postType, @RequestHeader("userUuid") String userUuid){
-       // 비회원인경우!!!!
-        if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
-
-        List<String> userStacks = profileServiceClient.viewUserStackList(userUuid).getBody(); // 서비스 간 통신
+    public ResponseEntity<Page<PostSimpleResponse>> getRecommendPostList(@RequestParam PostType postType, @RequestHeader HttpHeaders headers){
+        String userUuid = headers.getFirst("userUuid");
+        List<String> userStacks = getStackList(userUuid); // 서비스 간 통신
         return ResponseEntity.ok(postService.getRecommendPostList(postType,userStacks));
     }
 
@@ -106,6 +104,11 @@ public class PostController {
         String postUuid = postService.updateStatus(postStatusRequest);
         PostCommentResponse responseUpdate = PostCommentResponse.getInstanceForUpdate(postUuid);
         return ResponseEntity.ok(responseUpdate);
+    }
+
+    private List<String> getStackList(String userUuid){
+        return (userUuid!=null && !userUuid.isEmpty()) ?
+                profileServiceClient.viewUserStackList(userUuid).getBody() : null;
     }
 
     private String getImageUrl(String postImage, String postUuid){
