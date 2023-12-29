@@ -113,14 +113,16 @@ public class PostController {
                 profileServiceClient.viewUserStackList(userUuid).getBody() : null;
     }
 
-    private String getImageUrl(String postImage, String postUuid){
-        if(postImage!=null&&!postImage.isEmpty()) {
-            S3ImageVo s3ImageVo = S3ImageVo.getInstance(postImage,postUuid);
-            if(!S3ImageVo.isValid(s3ImageVo.getContentType())) {
-                throw new IllegalArgumentException(messageUtil.getS3ImageTypeErrorMessage(s3ImageVo.getContentType()));}
-            return postService.savePostImageToS3Bucket(s3ImageVo);
-        }
-        return null;
+    private String getImageUrl(String encodingImage, String postUuid){
+        if(S3ImageVo.isNullOrEmpty(encodingImage)) return null;
+        if(S3ImageVo.isValidContents(encodingImage)) {
+            throw new IllegalArgumentException(messageUtil.getImageContentErrorMessage()); }
+        if(S3ImageVo.isValidType(encodingImage)) {
+            throw new IllegalArgumentException(messageUtil.getImageTypeErrorMessage()); }
+
+        S3ImageVo s3ImageVo = S3ImageVo.getInstance(encodingImage,postUuid);
+        return postService.savePostImageToS3Bucket(s3ImageVo);
+
     }
 
     private Address getAddress(String address){
