@@ -42,11 +42,16 @@ public class Base64ErrorTest {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(decodedImage.length);
         metadata.setContentType(contentType);
-        String name = "post/"+ "11111111";
+        String name = "post/"+ "22222222";
 
-        amazonS3Client.putObject(awsConfigVo.getBucket(), name, bis, metadata);
-        String url = amazonS3Client.getUrl(awsConfigVo.getBucket(), name).toString();
-        System.out.println("url :" + url);
+        if(amazonS3Client.doesObjectExist(awsConfigVo.getBucket(),name)){
+            amazonS3Client.deleteObject(awsConfigVo.getBucket(),name);
+        }
+
+
+//        amazonS3Client.putObject(awsConfigVo.getBucket(), name, bis, metadata);
+//        String url = amazonS3Client.getUrl(awsConfigVo.getBucket(), name).toString();
+//        System.out.println("url :" + url);
 
         // 1. post / profile 구분 ( 해결 )
         // 2. png,jpg,jpeg 만 가능하도록, 다른 파일형식 들어오면 에러처리 ( 요청으로 들어온 데이터 전처리하기 )

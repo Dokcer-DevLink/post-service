@@ -120,7 +120,7 @@ public class PostController {
                 throw new IllegalArgumentException(messageUtil.getS3ImageTypeErrorMessage(s3ImageVo.getContentType()));}
             return postService.savePostImageToS3Bucket(s3ImageVo);
         }
-        return S3ImageVo.DEFAULT_URL;
+        return null;
     }
 
     private Address getAddress(String address){
