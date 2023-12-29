@@ -43,7 +43,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.modelmapper:modelmapper'
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -56,7 +57,7 @@ dependencies {
 	implementation "com.querydsl:querydsl-core:${queryDslVersion}"
 
 	// AWS S3
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws'
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'commons-codec:commons-codec'
 
 	// SpringCloud 및 Kubernetes
