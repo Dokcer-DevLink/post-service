@@ -115,9 +115,9 @@ public class PostController {
 
     private String getImageUrl(String encodingImage, String postUuid){
         if(S3ImageVo.isNullOrEmpty(encodingImage)) return null;
-        if(S3ImageVo.isValidContents(encodingImage)) {
+        if(S3ImageVo.isNotValidContents(encodingImage)) {
             throw new IllegalArgumentException(messageUtil.getImageContentErrorMessage()); }
-        if(S3ImageVo.isValidType(encodingImage)) {
+        if(S3ImageVo.isNotValidType(encodingImage)) {
             throw new IllegalArgumentException(messageUtil.getImageTypeErrorMessage()); }
 
         S3ImageVo s3ImageVo = S3ImageVo.getInstance(encodingImage,postUuid);
