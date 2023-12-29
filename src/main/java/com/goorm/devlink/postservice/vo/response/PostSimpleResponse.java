@@ -26,7 +26,7 @@ public class PostSimpleResponse {
                 .postTitle(post.getPostTitle())
                 .postImageUrl(post.getPostImageUrl())
                 .stacks(post.getStacks())
-                .address(post.getAddress().getName())
+                .address(post.getAddress().getAddressName())
                 .build();
     }
 

@@ -1,5 +1,6 @@
 package com.goorm.devlink.postservice.vo.response;
 
+import com.goorm.devlink.postservice.entity.Address;
 import com.goorm.devlink.postservice.vo.OnOffline;
 import com.goorm.devlink.postservice.vo.PostStatus;
 import com.goorm.devlink.postservice.vo.PostType;
@@ -19,7 +20,7 @@ public class PostDetailResponse {
     private List<String> stacks;
     private OnOffline onOffline;
     private PostType postType;
-    private String address;
+    private Address address;
     private int unitTimeCount;
     private String userUuid;
     private PostStatus postStatus;

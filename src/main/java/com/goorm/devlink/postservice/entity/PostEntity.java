@@ -1,6 +1,7 @@
 package com.goorm.devlink.postservice.entity;
 
 
+import com.goorm.devlink.postservice.dto.PostBasicDto;
 import com.goorm.devlink.postservice.vo.OnOffline;
 import com.goorm.devlink.postservice.vo.PostStatus;
 import com.goorm.devlink.postservice.vo.PostType;
@@ -9,6 +10,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -52,7 +54,7 @@ public class PostEntity extends BaseTimeEntity{
     private Address address;
 
     @Column(name = "unit_time_count")
-    private int unitTimeCount;
+    private Integer unitTimeCount;
 
     @Column(name = "isDeleted")
     private boolean isDeleted;
@@ -61,11 +63,20 @@ public class PostEntity extends BaseTimeEntity{
     @CollectionTable(name = "post_stack", joinColumns = @JoinColumn(name = "post_id"))
     private List<String> stacks = new ArrayList<>();
 
-    public void updateForMerge(long postId) {
-        id = postId;
-    }
     public void updateStatus(PostStatus postStatus) {
         this.postStatus = postStatus;
+    }
+
+    public void update(PostBasicDto postBasicDto){
+        this.setPostTitle(Optional.ofNullable(postBasicDto.getPostTitle()).orElse(postTitle));
+        this.setPostImageUrl(Optional.ofNullable(postBasicDto.getPostImageUrl()).orElse(postImageUrl));
+        this.setPostContent(Optional.ofNullable(postBasicDto.getPostContent()).orElse(postContent));
+        this.setStacks(Optional.ofNullable(postBasicDto.getStacks()).orElse(stacks));
+        this.setOnOffline(Optional.ofNullable(postBasicDto.getOnOffline()).orElse(onOffline));
+        this.setPostType(Optional.ofNullable(postBasicDto.getPostType()).orElse(postType));
+        this.setAddress(Optional.ofNullable(postBasicDto.getAddress()).orElse(address));
+        this.setPostStatus(Optional.ofNullable(postBasicDto.getPostStatus()).orElse(postStatus));
+        this.setUnitTimeCount(Optional.ofNullable(postBasicDto.getUnitTimeCount()).orElse(unitTimeCount));
     }
 
 

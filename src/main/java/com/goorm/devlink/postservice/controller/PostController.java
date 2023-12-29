@@ -86,7 +86,7 @@ public class PostController {
         if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
         String imageUrl = getImageUrl(postEditRequest.getPostImage(),postEditRequest.getPostUuid());
         Address address = getAddress(postEditRequest.getAddress());
-        postService.editPost(PostBasicDto.getInstanceForEdit(postEditRequest,address,imageUrl,userUuid));
+        postService.editPost(PostBasicDto.getInstanceForEdit(postEditRequest,address,imageUrl));
         PostCommentResponse responseEdit = PostCommentResponse.getInstanceForEdit(postEditRequest.getPostUuid());
         return ResponseEntity.ok(responseEdit);
     }

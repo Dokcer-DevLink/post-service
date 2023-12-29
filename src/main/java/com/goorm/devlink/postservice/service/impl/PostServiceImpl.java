@@ -74,9 +74,8 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public void editPost(PostBasicDto instanceForEdit) {
         PostEntity findPostEntity = findPostEntity(instanceForEdit.getPostUuid());
-        PostEntity postEntity = modelMapperUtil.convertToPostEntity(instanceForEdit);
-        postEntity.updateForMerge(findPostEntity.getId());
-        postRepository.save(postEntity);
+        findPostEntity.update(instanceForEdit);
+        postRepository.save(findPostEntity);
     }
 
     @Override

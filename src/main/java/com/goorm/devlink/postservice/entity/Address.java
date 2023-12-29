@@ -13,15 +13,15 @@ import javax.persistence.Embeddable;
 @Builder
 public class Address {
 
-    private String name;
-    private double x;
-    private double y;
+    private String addressName;
+    private double addressX;
+    private double addressY;
 
     public static Address getInstance(String name,double x, double y){
         return Address.builder()
-                .name(name)
-                .x(x)
-                .y(y)
+                .addressName(name)
+                .addressX(x)
+                .addressY(y)
                 .build();
     }
 }
