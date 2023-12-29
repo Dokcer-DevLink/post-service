@@ -19,7 +19,7 @@ public class PostBasicDto {
     private OnOffline onOffline;
     private PostType postType;
     private Address address;
-    private int unitTimeCount;
+    private Integer unitTimeCount;
     private String userUuid;
     private PostStatus postStatus;
 
@@ -40,7 +40,7 @@ public class PostBasicDto {
                 .build();
     }
 
-    public static PostBasicDto getInstanceForEdit(PostEditRequest postEditRequest, Address address,String postImageUrl,String userUuid){
+    public static PostBasicDto getInstanceForEdit(PostEditRequest postEditRequest, Address address,String postImageUrl ){
         return PostBasicDto.builder()
                 .postTitle(postEditRequest.getPostTitle())
                 .postImageUrl(postImageUrl)
@@ -52,7 +52,6 @@ public class PostBasicDto {
                 .unitTimeCount(postEditRequest.getUnitTimeCount())
                 .postStatus(postEditRequest.getPostStatus())
                 .postUuid(postEditRequest.getPostUuid())
-                .userUuid(userUuid)
                 .build();
     }
 }

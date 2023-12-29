@@ -6,7 +6,7 @@ build/
 !**/src/test/**/build/
 src/main/resources/application-dev.yaml
 src/main/resources/bootstrap-dev.yaml
-
+src/test/resources/
 ### STS ###
 .apt_generated
 .classpath

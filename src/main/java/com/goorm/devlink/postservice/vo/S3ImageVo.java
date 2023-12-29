@@ -33,13 +33,23 @@ public class S3ImageVo {
                 .build();
     }
 
-    public static boolean isValid(String contentType){
+    public static boolean isNullOrEmpty(String encodingData){
+        return (encodingData!=null&&!encodingData.isEmpty())? false : true;
+    }
+
+    public static boolean isNotValidContents(String encodingData){
+        return ( encodingData.split(",").length == 2)? false : true;
+    }
+
+    public static boolean isNotValidType(String encodingData){
+        String[] arr = encodingData.split(",");
+        String contentType = arr[0].substring(arr[0].indexOf(":") + 1, arr[0].indexOf(";"));
+
         return (    S3ImageType.PNG.getContentType().equals(contentType) ||
                     S3ImageType.JPG.getContentType().equals(contentType) ||
                     S3ImageType.JPEG.getContentType().equals(contentType)
-                ) ? true : false;
+                ) ? false : true;
     }
-
 
     @Getter
     public enum S3ImageType{

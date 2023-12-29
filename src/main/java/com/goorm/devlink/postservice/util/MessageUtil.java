@@ -26,6 +26,16 @@ public class MessageUtil {
     public String getIllegalAddressMessage(String location) {
         return getMessage("request.illegal.address",new String[]{location});
     }
+
+    public String getImageTypeErrorMessage() {
+        return getMessage("request.type.image");
+    }
+
+    public String getImageContentErrorMessage() {
+        return getMessage("request.content.image");
+
+    }
+
     public String getEnumTypeMisMatchMessage(String errorEnum, String errorValue){
         switch(errorEnum){
             case "postType" : return getMessage("request.typemismatch.postType",new String[]{errorValue});
@@ -42,7 +52,7 @@ public class MessageUtil {
     }
 
 
-    public String getS3ImageTypeErrorMessage(String contentType) {
-        return getMessage("request.type.image",new String[]{contentType});
-    }
+
+
+
 }
