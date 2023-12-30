@@ -86,14 +86,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostMatchingResponse> getPostMatchingData(PostMatchingRequest postMatchingRequest) {
         List<PostEntity> postEntityList = postRepository.findPostMatchingByStackAndAddress(postMatchingRequest);
-        postEntityList.stream().forEach( post-> {
-                    log.info("Post Title : {}", post.getPostTitle());
-                    log.info("Post ONOFFLINE : {}", post.getOnOffline());
-                    if(post.getAddress() != null){
-                        log.info("Post Address : {}", post.getAddress().getAddressName());
-                    }
-                }
-        );
         return postEntityList.stream().collect(
                 Collectors.mapping(post->modelMapperUtil.converToPostMatchingResponse(post) ,Collectors.toList()));
     }
@@ -121,8 +113,6 @@ public class PostServiceImpl implements PostService {
     public Address createAddress(String address) {
         return kakaoAddressUtil.createAddress(address);
     }
-
-
 
     private PostEntity findPostEntity(String postUuid){
         return postRepository.findByPostUuid(postUuid).orElseThrow(() -> {

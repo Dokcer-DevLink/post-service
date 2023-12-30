@@ -1,5 +1,6 @@
 package com.goorm.devlink.postservice.vo.request;
 
+import com.goorm.devlink.postservice.vo.OnOffline;
 import com.goorm.devlink.postservice.vo.PostType;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,9 @@ import java.util.List;
 public class PostMatchingRequest {
 
     private List<String> stacks;
-    private double addressX;
-    private double addressY;
+    private Double addressX;
+    private Double addressY;
     private PostType postType;
+    private OnOffline onOffline;
+
 }
