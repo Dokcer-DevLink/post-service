@@ -5,6 +5,7 @@ import com.goorm.devlink.postservice.repository.PostRepositoryCustom;
 import com.goorm.devlink.postservice.vo.PostType;
 import com.goorm.devlink.postservice.vo.request.PostMatchingRequest;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.goorm.devlink.postservice.entity.QPostEntity.postEntity;
@@ -77,9 +79,10 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return queryFactory.selectFrom(postEntity)
                 .where(
                         postEntity.postType.eq(postMatchingRequest.getPostType()),
+                        postEntity.onOffline.eq(postMatchingRequest.getOnOffline()),
                         searchStackCondition(postMatchingRequest.getStacks())
                 )
-                .orderBy(distanceCondition(postMatchingRequest.getAddressX(),postMatchingRequest.getAddressY()).asc())
+                .orderBy(orderByCondition(postMatchingRequest.getAddressX(),postMatchingRequest.getAddressY()))
                 .fetch();
     }
 
@@ -108,6 +111,12 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return booleanBUilder;
     }
 
+    private OrderSpecifier orderByCondition(Double addressX, Double addressY){
+        return ( addressX == null || addressY == null )?
+                postEntity.createdDate.desc() : distanceCondition(addressX,addressY).asc();
+    }
+
+
     private NumberExpression<Double> distanceCondition(Double addressX, Double addressY) {
 
         NumberExpression<Double> radiansX =
@@ -132,5 +141,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return Expressions.numberTemplate(Double.class, "6371 * {0}", acosExpression);
 
     }
+
 
 }

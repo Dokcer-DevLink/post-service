@@ -9,5 +9,4 @@ import lombok.Setter;
 public class PostMatchingResponse {
     private String postUuid;
     private String userUuid;
-    private OnOffline onOffline;
 }
