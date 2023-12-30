@@ -10,11 +10,14 @@ import com.goorm.devlink.postservice.util.KakaoAddressUtil;
 import com.goorm.devlink.postservice.util.MessageUtil;
 import com.goorm.devlink.postservice.util.ModelMapperUtil;
 import com.goorm.devlink.postservice.vo.S3ImageVo;
+import com.goorm.devlink.postservice.vo.request.PostMatchingRequest;
 import com.goorm.devlink.postservice.vo.response.PostDetailResponse;
+import com.goorm.devlink.postservice.vo.response.PostMatchingResponse;
 import com.goorm.devlink.postservice.vo.response.PostSimpleResponse;
 import com.goorm.devlink.postservice.vo.request.PostStatusRequest;
 import com.goorm.devlink.postservice.vo.PostType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,9 +26,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
@@ -79,6 +84,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostMatchingResponse> getPostMatchingData(PostMatchingRequest postMatchingRequest) {
+        List<PostEntity> postEntityList = postRepository.findPostMatchingByStackAndAddress(postMatchingRequest);
+        postEntityList.stream().forEach( post-> {
+                    log.info("Post Title : {}", post.getPostTitle());
+                    log.info("Post ONOFFLINE : {}", post.getOnOffline());
+                    if(post.getAddress() != null){
+                        log.info("Post Address : {}", post.getAddress().getAddressName());
+                    }
+                }
+        );
+        return postEntityList.stream().collect(
+                Collectors.mapping(post->modelMapperUtil.converToPostMatchingResponse(post) ,Collectors.toList()));
+    }
+    @Override
     @Transactional
     public void deletePost(String postUuid) {
         postRepository.delete(findPostEntity(postUuid));
@@ -102,6 +121,8 @@ public class PostServiceImpl implements PostService {
     public Address createAddress(String address) {
         return kakaoAddressUtil.createAddress(address);
     }
+
+
 
     private PostEntity findPostEntity(String postUuid){
         return postRepository.findByPostUuid(postUuid).orElseThrow(() -> {
