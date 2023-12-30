@@ -71,7 +71,7 @@ public class PostController {
 
     // 포스트 생성하기
     @PostMapping("/api/post")
-    public ResponseEntity<PostCommentResponse> createPost(@RequestBody PostCreateRequest postCreateRequest,
+    public ResponseEntity<PostCommentResponse> createPost(@RequestBody @Valid PostCreateRequest postCreateRequest,
                                                           @RequestHeader("userUuid") String userUuid){
         if(userUuid.isEmpty()) { throw new NoSuchElementException(messageUtil.getUserUuidEmptyMessage());}
         String postUuid = UUID.randomUUID().toString();
