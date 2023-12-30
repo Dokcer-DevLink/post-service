@@ -1,12 +1,14 @@
 package com.goorm.devlink.postservice.vo.response;
 
 
+import com.goorm.devlink.postservice.entity.Address;
 import com.goorm.devlink.postservice.entity.PostEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -26,8 +28,12 @@ public class PostSimpleResponse {
                 .postTitle(post.getPostTitle())
                 .postImageUrl(post.getPostImageUrl())
                 .stacks(post.getStacks())
-                .address(post.getAddress().getAddressName())
+                .address(getAddressName(post.getAddress()))
                 .build();
+    }
+
+    private static String getAddressName(Address address){
+        return ( address == null )? null : address.getAddressName();
     }
 
 
