@@ -17,9 +17,9 @@ public class KakaoAddressTest {
     @Test
     public void kakaoAddressUtilTest(){
         Address address = kakaoAddressUtil.createAddress("");
-        System.out.println(address.getName());
-        System.out.println(address.getX());
-        System.out.println(address.getY());
+//        System.out.println(address.getName());
+//        System.out.println(address.getX());
+//        System.out.println(address.getY());
 
 
 

@@ -8,9 +8,11 @@ import com.goorm.devlink.postservice.util.MessageUtil;
 import com.goorm.devlink.postservice.vo.*;
 import com.goorm.devlink.postservice.vo.request.PostCreateRequest;
 import com.goorm.devlink.postservice.vo.request.PostEditRequest;
+import com.goorm.devlink.postservice.vo.request.PostMatchingRequest;
 import com.goorm.devlink.postservice.vo.request.PostStatusRequest;
 import com.goorm.devlink.postservice.vo.response.PostCommentResponse;
 import com.goorm.devlink.postservice.vo.response.PostDetailResponse;
+import com.goorm.devlink.postservice.vo.response.PostMatchingResponse;
 import com.goorm.devlink.postservice.vo.response.PostSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -106,6 +108,12 @@ public class PostController {
         String postUuid = postService.updateStatus(postStatusRequest);
         PostCommentResponse responseUpdate = PostCommentResponse.getInstanceForUpdate(postUuid);
         return ResponseEntity.ok(responseUpdate);
+    }
+
+    // 매칭 데이터 전달 ( 매칭 서비스 - 포스트 서비스 )
+    @GetMapping("/api/post/match")
+    public ResponseEntity<List<PostMatchingResponse>> getPostMatchingData(@RequestBody PostMatchingRequest postMatchingRequest){
+        return ResponseEntity.ok(postService.getPostMatchingData(postMatchingRequest));
     }
 
     private List<String> getStackList(String userUuid){

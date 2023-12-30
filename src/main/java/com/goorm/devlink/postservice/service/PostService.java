@@ -3,7 +3,9 @@ package com.goorm.devlink.postservice.service;
 import com.goorm.devlink.postservice.dto.PostBasicDto;
 import com.goorm.devlink.postservice.entity.Address;
 import com.goorm.devlink.postservice.vo.S3ImageVo;
+import com.goorm.devlink.postservice.vo.request.PostMatchingRequest;
 import com.goorm.devlink.postservice.vo.response.PostDetailResponse;
+import com.goorm.devlink.postservice.vo.response.PostMatchingResponse;
 import com.goorm.devlink.postservice.vo.response.PostSimpleResponse;
 import com.goorm.devlink.postservice.vo.request.PostStatusRequest;
 import com.goorm.devlink.postservice.vo.PostType;
@@ -24,4 +26,6 @@ public interface PostService {
     String savePostImageToS3Bucket(S3ImageVo s3ImageVo);
 
     Address createAddress(String address);
+
+    List<PostMatchingResponse> getPostMatchingData(PostMatchingRequest postMatchingRequest);
 }

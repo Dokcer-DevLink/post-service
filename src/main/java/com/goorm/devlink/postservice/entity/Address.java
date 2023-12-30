@@ -14,10 +14,10 @@ import javax.persistence.Embeddable;
 public class Address {
 
     private String addressName;
-    private double addressX;
-    private double addressY;
+    private Double addressX;
+    private Double addressY;
 
-    public static Address getInstance(String name,double x, double y){
+    public static Address getInstance(String name,Double x, Double y){
         return Address.builder()
                 .addressName(name)
                 .addressX(x)
