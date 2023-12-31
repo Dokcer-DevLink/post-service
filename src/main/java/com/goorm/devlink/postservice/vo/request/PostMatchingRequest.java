@@ -17,5 +17,6 @@ public class PostMatchingRequest {
     private Address address;
     private PostType postType;
     private OnOffline onOffline;
+    private String userUuid;
 
 }
