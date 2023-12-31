@@ -1,5 +1,6 @@
 package com.goorm.devlink.postservice.repository.impl;
 
+import com.goorm.devlink.postservice.entity.Address;
 import com.goorm.devlink.postservice.entity.PostEntity;
 import com.goorm.devlink.postservice.repository.PostRepositoryCustom;
 import com.goorm.devlink.postservice.vo.PostType;
@@ -82,7 +83,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                         postEntity.onOffline.eq(postMatchingRequest.getOnOffline()),
                         searchStackCondition(postMatchingRequest.getStacks())
                 )
-                .orderBy(orderByCondition(postMatchingRequest.getAddressX(),postMatchingRequest.getAddressY()))
+                .orderBy(orderByCondition(postMatchingRequest.getAddress()))
                 .fetch();
     }
 
@@ -111,32 +112,31 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return booleanBUilder;
     }
 
-    private OrderSpecifier orderByCondition(Double addressX, Double addressY){
-        return ( addressX == null || addressY == null )?
-                postEntity.createdDate.desc() : distanceCondition(addressX,addressY).asc();
+    private OrderSpecifier orderByCondition(Address address){
+        return ( address == null )?
+                postEntity.createdDate.desc() : distanceCondition(address.getAddressX(), address.getAddressY()).asc();
     }
 
 
     private NumberExpression<Double> distanceCondition(Double addressX, Double addressY) {
-
         NumberExpression<Double> radiansX =
                 Expressions.numberTemplate(Double.class, "radians({0})", addressX);
-
         NumberExpression<Double> cosX =
                 Expressions.numberTemplate(Double.class, "cos({0})", radiansX);
         NumberExpression<Double> cosPostX =
-                Expressions.numberTemplate(Double.class, "cos(radians({0}))", postEntity.address.addressX);
-
+                Expressions.numberTemplate(Double.class, "cos(radians({0}))",
+                        postEntity.address.addressX);
         NumberExpression<Double> sinAddressX =
                 Expressions.numberTemplate(Double.class, "sin({0})", radiansX);
         NumberExpression<Double> sinPostAddressX =
-                Expressions.numberTemplate(Double.class, "sin(radians({0}))",  postEntity.address.addressX);
-
+                Expressions.numberTemplate(Double.class, "sin(radians({0}))",
+                        postEntity.address.addressX);
         NumberExpression<Double> cosLongitude =
-                Expressions.numberTemplate(Double.class, "cos(radians({0}) - radians({1}))", postEntity.address.addressY, addressY);
-
+                Expressions.numberTemplate(Double.class, "cos(radians({0}) - radians({1}))",
+                        postEntity.address.addressY, addressY);
         NumberExpression<Double> acosExpression =
-                Expressions.numberTemplate(Double.class, "acos({0})", cosX.multiply(cosPostX).multiply(cosLongitude).add(sinAddressX.multiply(sinPostAddressX)));
+                Expressions.numberTemplate(Double.class, "acos({0})",
+                        cosX.multiply(cosPostX).multiply(cosLongitude).add(sinAddressX.multiply(sinPostAddressX)));
 
         return Expressions.numberTemplate(Double.class, "6371 * {0}", acosExpression);
 
