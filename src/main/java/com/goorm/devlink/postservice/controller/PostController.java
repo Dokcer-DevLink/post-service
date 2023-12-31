@@ -111,7 +111,7 @@ public class PostController {
     }
 
     // 매칭 데이터 전달 ( 매칭 서비스 - 포스트 서비스 )
-    @GetMapping("/api/post/match")
+    @PostMapping("/api/post/match")
     public ResponseEntity<List<PostMatchingResponse>> getPostMatchingData(@RequestBody PostMatchingRequest postMatchingRequest){
         return ResponseEntity.ok(postService.getPostMatchingData(postMatchingRequest));
     }

@@ -79,6 +79,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         return queryFactory.selectFrom(postEntity)
                 .where(
+                        postEntity.userUuid.ne(postMatchingRequest.getUserUuid()),
                         postEntity.postType.eq(postMatchingRequest.getPostType()),
                         postEntity.onOffline.eq(postMatchingRequest.getOnOffline()),
                         searchStackCondition(postMatchingRequest.getStacks())
