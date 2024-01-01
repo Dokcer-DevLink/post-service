@@ -113,7 +113,7 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostMatchingData(postMatchingRequest));
     }
 
-    @GetMapping
+    @GetMapping("/api/post/apply")
     ResponseEntity<List<MentoringPostResponse>> getPostListForMentoring(@RequestParam List<String> postUuids){
         List<MentoringPostResponse> postResponse = postService.getPostListForMentoring(postUuids);
         return ResponseEntity.ok(postResponse);
