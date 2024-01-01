@@ -11,6 +11,7 @@ import com.goorm.devlink.postservice.util.MessageUtil;
 import com.goorm.devlink.postservice.util.ModelMapperUtil;
 import com.goorm.devlink.postservice.vo.S3ImageVo;
 import com.goorm.devlink.postservice.vo.request.PostMatchingRequest;
+import com.goorm.devlink.postservice.vo.response.MentoringPostResponse;
 import com.goorm.devlink.postservice.vo.response.PostDetailResponse;
 import com.goorm.devlink.postservice.vo.response.PostMatchingResponse;
 import com.goorm.devlink.postservice.vo.response.PostSimpleResponse;
@@ -89,6 +90,17 @@ public class PostServiceImpl implements PostService {
         return postEntityList.stream().collect(
                 Collectors.mapping(post->modelMapperUtil.converToPostMatchingResponse(post) ,Collectors.toList()));
     }
+
+    @Override
+    public List<MentoringPostResponse> getPostListForMentoring(List<String> postUuids) {
+        log.info("postUuids size {}",postUuids.size());
+        List<PostEntity> postEntityList = postRepository.findByPostUuidIn(postUuids);
+        log.info("postEntityList size {}",postEntityList.size());
+
+        return postEntityList.stream()
+                .map(postEntity -> MentoringPostResponse.convert(postEntity)).collect(Collectors.toList());
+    }
+
     @Override
     @Transactional
     public void deletePost(String postUuid) {

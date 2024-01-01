@@ -4,6 +4,7 @@ import com.goorm.devlink.postservice.dto.PostBasicDto;
 import com.goorm.devlink.postservice.entity.Address;
 import com.goorm.devlink.postservice.vo.S3ImageVo;
 import com.goorm.devlink.postservice.vo.request.PostMatchingRequest;
+import com.goorm.devlink.postservice.vo.response.MentoringPostResponse;
 import com.goorm.devlink.postservice.vo.response.PostDetailResponse;
 import com.goorm.devlink.postservice.vo.response.PostMatchingResponse;
 import com.goorm.devlink.postservice.vo.response.PostSimpleResponse;
@@ -28,4 +29,6 @@ public interface PostService {
     Address createAddress(String address);
 
     List<PostMatchingResponse> getPostMatchingData(PostMatchingRequest postMatchingRequest);
+
+    List<MentoringPostResponse> getPostListForMentoring(List<String> postUuids);
 }
