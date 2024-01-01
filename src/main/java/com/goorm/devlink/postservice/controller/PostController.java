@@ -10,10 +10,7 @@ import com.goorm.devlink.postservice.vo.request.PostCreateRequest;
 import com.goorm.devlink.postservice.vo.request.PostEditRequest;
 import com.goorm.devlink.postservice.vo.request.PostMatchingRequest;
 import com.goorm.devlink.postservice.vo.request.PostStatusRequest;
-import com.goorm.devlink.postservice.vo.response.PostCommentResponse;
-import com.goorm.devlink.postservice.vo.response.PostDetailResponse;
-import com.goorm.devlink.postservice.vo.response.PostMatchingResponse;
-import com.goorm.devlink.postservice.vo.response.PostSimpleResponse;
+import com.goorm.devlink.postservice.vo.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -114,6 +111,12 @@ public class PostController {
     @PostMapping("/api/post/match")
     public ResponseEntity<List<PostMatchingResponse>> getPostMatchingData(@RequestBody PostMatchingRequest postMatchingRequest){
         return ResponseEntity.ok(postService.getPostMatchingData(postMatchingRequest));
+    }
+
+    @GetMapping("/api/post/apply")
+    ResponseEntity<List<MentoringPostResponse>> getPostListForMentoring(@RequestParam List<String> postUuids){
+        List<MentoringPostResponse> postResponse = postService.getPostListForMentoring(postUuids);
+        return ResponseEntity.ok(postResponse);
     }
 
     private List<String> getStackList(String userUuid){
