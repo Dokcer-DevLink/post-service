@@ -93,10 +93,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<MentoringPostResponse> getPostListForMentoring(List<String> postUuids) {
-        log.info("postUuids size {}",postUuids.size());
         List<PostEntity> postEntityList = postRepository.findByPostUuidIn(postUuids);
-        log.info("postEntityList size {}",postEntityList.size());
-
         return postEntityList.stream()
                 .map(postEntity -> MentoringPostResponse.convert(postEntity)).collect(Collectors.toList());
     }
