@@ -60,6 +60,9 @@ public class PostServiceImpl implements PostService {
     public Page<PostSimpleResponse> getRecommendPostList(PostType postType, List<String> profileStacks) {
         PageRequest pageRequest = PageRequest.of(pageConfigVo.getOffset(), pageConfigVo.getSize());
         Page<PostEntity> postPage = postRepository.findPostListByPostTypeAndStacks(postType,profileStacks,pageRequest);
+        if(postPage.getContent().size() == 0){
+            postPage = postRepository.findPostListByPostTypeAndStacks(postType,null,pageRequest);
+        }
         return postPage.map( post -> PostSimpleResponse.getInstance(post) );
     }
 
