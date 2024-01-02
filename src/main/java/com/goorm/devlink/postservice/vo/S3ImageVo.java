@@ -37,6 +37,10 @@ public class S3ImageVo {
         return (encodingData!=null&&!encodingData.isEmpty())? false : true;
     }
 
+    public static boolean isImageUrl(String encodingData){
+        return ( encodingData.contains("https://") || encodingData.contains("http://"))? true : false;
+    }
+
     public static boolean isNotValidContents(String encodingData){
         return ( encodingData.split(",").length == 2)? false : true;
     }
