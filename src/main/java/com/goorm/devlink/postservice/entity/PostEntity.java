@@ -70,7 +70,7 @@ public class PostEntity extends BaseTimeEntity{
 
     public void update(PostBasicDto postBasicDto){
         this.setPostTitle(Optional.ofNullable(postBasicDto.getPostTitle()).orElse(postTitle));
-        this.setPostImageUrl(Optional.ofNullable(postBasicDto.getPostImageUrl()).orElse(postImageUrl));
+        this.setPostImageUrl(postBasicDto.getPostImageUrl());
         this.setPostContent(Optional.ofNullable(postBasicDto.getPostContent()).orElse(postContent));
         this.setStacks(Optional.ofNullable(postBasicDto.getStacks()).orElse(stacks));
         this.setOnOffline(Optional.ofNullable(postBasicDto.getOnOffline()).orElse(onOffline));
