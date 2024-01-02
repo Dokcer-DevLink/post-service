@@ -24,7 +24,11 @@ public class MentoringPostResponse {
                 .postTitle(postEntity.getPostTitle())
                 .postImageUrl(postEntity.getPostImageUrl())
                 .stacks(postEntity.getStacks())
-                .address(postEntity.getAddress().getAddressName())
+                .address(getAddress(postEntity))
                 .build();
+    }
+
+    public static String getAddress(PostEntity postEntity){
+        return ( postEntity.getAddress() != null )? postEntity.getAddress().getAddressName() : null;
     }
 }
