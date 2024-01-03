@@ -19,9 +19,7 @@ import com.goorm.devlink.postservice.vo.request.PostStatusRequest;
 import com.goorm.devlink.postservice.vo.PostType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,9 +40,9 @@ public class PostServiceImpl implements PostService {
     private final KakaoAddressUtil kakaoAddressUtil;
 
     @Override
-    public Page<PostSimpleResponse> getPostList(PostType postType, String keyword) {
-        PageRequest pageRequest = PageRequest.of(pageConfigVo.getOffset(), pageConfigVo.getSize());
-        Page<PostEntity> postPage = postRepository.findPostListByPostTypeAndKeyWord(postType, keyword, pageRequest);
+    public Slice<PostSimpleResponse> getPostList(PostType postType, String keyword, Pageable pageable) {
+        //PageRequest pageRequest = PageRequest.of(pageConfigVo.getOffset(), pageConfigVo.getSize());
+        Slice<PostEntity> postPage = postRepository.findPostListByPostTypeAndKeyWord(postType, keyword, pageable);
         return postPage.map( post -> PostSimpleResponse.getInstance(post) );
     }
 

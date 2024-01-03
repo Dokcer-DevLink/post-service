@@ -14,6 +14,9 @@ import com.goorm.devlink.postservice.vo.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,9 +49,10 @@ public class PostController {
 
     // 포스트 리스트 조회 ( 포스트 검색 페이지 )
     @GetMapping("/api/post/list")
-    public ResponseEntity<Page<PostSimpleResponse>> getPostList(@RequestParam PostType postType,
-                                                                @RequestParam String keyword){
-        return ResponseEntity.ok(postService.getPostList(postType,keyword));
+    public ResponseEntity<Slice<PostSimpleResponse>> getPostList(@RequestParam PostType postType,
+                                                                 @RequestParam String keyword,
+                                                                 @PageableDefault(page = 0, size = 2) Pageable pageable){
+        return ResponseEntity.ok(postService.getPostList(postType,keyword,pageable));
     }
 
     // 포스트 리스트 조회 ( 마이페이지 )

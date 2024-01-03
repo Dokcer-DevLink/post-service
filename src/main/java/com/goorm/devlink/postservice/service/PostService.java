@@ -11,12 +11,14 @@ import com.goorm.devlink.postservice.vo.response.PostSimpleResponse;
 import com.goorm.devlink.postservice.vo.request.PostStatusRequest;
 import com.goorm.devlink.postservice.vo.PostType;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
 public interface PostService {
     String createPost(PostBasicDto postBasicDto);
-    Page<PostSimpleResponse> getPostList(PostType postType, String keyword);
+    Slice<PostSimpleResponse> getPostList(PostType postType, String keyword, Pageable pageable);
     void editPost(PostBasicDto instanceForEdit);
     void deletePost(String postUuid);
     PostDetailResponse getDetailPost(String postUuid);
