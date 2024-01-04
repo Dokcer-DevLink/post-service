@@ -51,7 +51,7 @@ public class PostController {
     @GetMapping("/api/post/list")
     public ResponseEntity<Slice<PostSimpleResponse>> getPostList(@RequestParam PostType postType,
                                                                  @RequestParam String keyword,
-                                                                 @PageableDefault(page = 0, size = 2) Pageable pageable){
+                                                                 @PageableDefault(page = 0, size = 10) Pageable pageable){
         return ResponseEntity.ok(postService.getPostList(postType,keyword,pageable));
     }
 
